@@ -231,15 +231,26 @@ func bedrockMiddleware(signer *v4.Signer, cfg aws.Config) option.Middleware {
 		}
 
 		ctx := r.Context()
-		credentials, err := cfg.Credentials.Retrieve(ctx)
-		if err != nil {
-			return nil, err
-		}
 
-		hash := sha256.Sum256(body)
-		err = signer.SignHTTP(ctx, credentials, r, hex.EncodeToString(hash[:]), "bedrock", cfg.Region, time.Now())
-		if err != nil {
-			return nil, err
+		switch {
+		case cfg.BearerAuthTokenProvider != nil:
+			token, err := cfg.BearerAuthTokenProvider.RetrieveBearerToken(ctx)
+			if err != nil {
+				return nil, err
+			}
+			r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token.Value))
+		case cfg.Credentials != nil:
+			credentials, err := cfg.Credentials.Retrieve(ctx)
+			if err != nil {
+				return nil, err
+			}
+			hash := sha256.Sum256(body)
+			err = signer.SignHTTP(ctx, credentials, r, hex.EncodeToString(hash[:]), "bedrock", cfg.Region, time.Now())
+			if err != nil {
+				return nil, err
+			}
+		default:
+			return nil, fmt.Errorf("no credentials or bearer token provider given")
 		}
 
 		return next(r)
