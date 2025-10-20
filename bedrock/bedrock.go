@@ -11,6 +11,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -233,6 +234,8 @@ func bedrockMiddleware(signer *v4.Signer, cfg aws.Config) option.Middleware {
 		ctx := r.Context()
 
 		switch {
+		case os.Getenv("AWS_BEARER_TOKEN_BEDROCK") != "":
+			r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", os.Getenv("AWS_BEARER_TOKEN_BEDROCK")))
 		case cfg.BearerAuthTokenProvider != nil:
 			token, err := cfg.BearerAuthTokenProvider.RetrieveBearerToken(ctx)
 			if err != nil {
