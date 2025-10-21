@@ -22,9 +22,9 @@ import (
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	"github.com/anthropics/anthropic-sdk-go/option"
-	"github.com/anthropics/anthropic-sdk-go/packages/ssestream"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/ssestream"
 )
 
 const DefaultVersion = "bedrock-2023-05-31"
@@ -154,9 +154,7 @@ func (e *eventstreamDecoder) Event() ssestream.Event {
 	return e.evt
 }
 
-var (
-	_ ssestream.Decoder = &eventstreamDecoder{}
-)
+var _ ssestream.Decoder = &eventstreamDecoder{}
 
 func init() {
 	ssestream.RegisterDecoder("application/vnd.amazon.eventstream", func(rc io.ReadCloser) ssestream.Decoder {

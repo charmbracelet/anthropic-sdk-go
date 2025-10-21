@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/charmbracelet/anthropic-sdk-go"
 )
 
 func main() {
@@ -77,7 +77,6 @@ func main() {
 			Messages:  messages,
 			Tools:     tools,
 		})
-
 		if err != nil {
 			panic(err)
 		}

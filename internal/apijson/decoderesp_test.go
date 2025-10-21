@@ -2,9 +2,10 @@ package apijson_test
 
 import (
 	"encoding/json"
-	"github.com/anthropics/anthropic-sdk-go/internal/apijson"
-	"github.com/anthropics/anthropic-sdk-go/packages/respjson"
 	"testing"
+
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apijson"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/respjson"
 )
 
 type StructWithNullExtraField struct {

@@ -11,14 +11,14 @@ import (
 	"slices"
 	"time"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/apijson"
-	"github.com/anthropics/anthropic-sdk-go/internal/apiquery"
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	"github.com/anthropics/anthropic-sdk-go/option"
-	"github.com/anthropics/anthropic-sdk-go/packages/pagination"
-	"github.com/anthropics/anthropic-sdk-go/packages/param"
-	"github.com/anthropics/anthropic-sdk-go/packages/respjson"
-	"github.com/anthropics/anthropic-sdk-go/shared/constant"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apijson"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apiquery"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/pagination"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/param"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/respjson"
+	"github.com/charmbracelet/anthropic-sdk-go/shared/constant"
 )
 
 // ModelService contains methods and other services that help with interacting with
@@ -37,7 +37,7 @@ type ModelService struct {
 func NewModelService(opts ...option.RequestOption) (r ModelService) {
 	r = ModelService{}
 	r.Options = opts
-	return
+	return r
 }
 
 // Get a specific model.
@@ -51,11 +51,11 @@ func (r *ModelService) Get(ctx context.Context, modelID string, query ModelGetPa
 	opts = slices.Concat(r.Options, opts)
 	if modelID == "" {
 		err = errors.New("missing required model_id parameter")
-		return
+		return res, err
 	}
 	path := fmt.Sprintf("v1/models/%s", modelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List available models.
@@ -115,6 +115,7 @@ type ModelInfo struct {
 
 // Returns the unmodified JSON received from the API
 func (r ModelInfo) RawJSON() string { return r.JSON.raw }
+
 func (r *ModelInfo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

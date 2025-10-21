@@ -12,9 +12,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anthropics/anthropic-sdk-go"
-	"github.com/anthropics/anthropic-sdk-go/internal/testutil"
-	"github.com/anthropics/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/testutil"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
 )
 
 func TestBetaFileListWithOptionalParams(t *testing.T) {

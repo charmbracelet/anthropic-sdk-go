@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/anthropics/anthropic-sdk-go/packages/param"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/param"
 )
 
 type Struct struct {

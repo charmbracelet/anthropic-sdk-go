@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/apierror"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apierror"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -14,15 +14,15 @@ import (
 	"slices"
 	"time"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/apiform"
-	"github.com/anthropics/anthropic-sdk-go/internal/apijson"
-	"github.com/anthropics/anthropic-sdk-go/internal/apiquery"
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	"github.com/anthropics/anthropic-sdk-go/option"
-	"github.com/anthropics/anthropic-sdk-go/packages/pagination"
-	"github.com/anthropics/anthropic-sdk-go/packages/param"
-	"github.com/anthropics/anthropic-sdk-go/packages/respjson"
-	"github.com/anthropics/anthropic-sdk-go/shared/constant"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apiform"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apijson"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apiquery"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/pagination"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/param"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/respjson"
+	"github.com/charmbracelet/anthropic-sdk-go/shared/constant"
 )
 
 // BetaFileService contains methods and other services that help with interacting
@@ -41,7 +41,7 @@ type BetaFileService struct {
 func NewBetaFileService(opts ...option.RequestOption) (r BetaFileService) {
 	r = BetaFileService{}
 	r.Options = opts
-	return
+	return r
 }
 
 // List Files
@@ -79,11 +79,11 @@ func (r *BetaFileService) Delete(ctx context.Context, fileID string, body BetaFi
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "files-api-2025-04-14")}, opts...)
 	if fileID == "" {
 		err = errors.New("missing required file_id parameter")
-		return
+		return res, err
 	}
 	path := fmt.Sprintf("v1/files/%s?beta=true", fileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Download File
@@ -95,11 +95,11 @@ func (r *BetaFileService) Download(ctx context.Context, fileID string, query Bet
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "files-api-2025-04-14"), option.WithHeader("Accept", "application/binary")}, opts...)
 	if fileID == "" {
 		err = errors.New("missing required file_id parameter")
-		return
+		return res, err
 	}
 	path := fmt.Sprintf("v1/files/%s/content?beta=true", fileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get File Metadata
@@ -111,11 +111,11 @@ func (r *BetaFileService) GetMetadata(ctx context.Context, fileID string, query 
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "files-api-2025-04-14")}, opts...)
 	if fileID == "" {
 		err = errors.New("missing required file_id parameter")
-		return
+		return res, err
 	}
 	path := fmt.Sprintf("v1/files/%s?beta=true", fileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Upload File
@@ -127,7 +127,7 @@ func (r *BetaFileService) Upload(ctx context.Context, params BetaFileUploadParam
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "files-api-2025-04-14")}, opts...)
 	path := "v1/files?beta=true"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type DeletedFile struct {
@@ -150,6 +150,7 @@ type DeletedFile struct {
 
 // Returns the unmodified JSON received from the API
 func (r DeletedFile) RawJSON() string { return r.JSON.raw }
+
 func (r *DeletedFile) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -198,6 +199,7 @@ type FileMetadata struct {
 
 // Returns the unmodified JSON received from the API
 func (r FileMetadata) RawJSON() string { return r.JSON.raw }
+
 func (r *FileMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

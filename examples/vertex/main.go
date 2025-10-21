@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	"github.com/anthropics/anthropic-sdk-go/vertex"
 
-	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/charmbracelet/anthropic-sdk-go/vertex"
+
+	"github.com/charmbracelet/anthropic-sdk-go"
 )
 
 func main() {

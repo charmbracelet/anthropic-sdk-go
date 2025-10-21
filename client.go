@@ -8,8 +8,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	"github.com/anthropics/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with
@@ -54,7 +54,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Models = NewModelService(opts...)
 	r.Beta = NewBetaService(opts...)
 
-	return
+	return r
 }
 
 // Execute makes a request with the given context, method, URL, request params,

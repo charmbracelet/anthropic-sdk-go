@@ -19,8 +19,6 @@ import (
 	"encoding"
 	"encoding/base64"
 	"fmt"
-	"github.com/anthropics/anthropic-sdk-go/internal/encoding/json/sentinel"
-	"github.com/anthropics/anthropic-sdk-go/internal/encoding/json/shims"
 	"math"
 	"reflect"
 	"slices"
@@ -30,6 +28,9 @@ import (
 	"unicode"
 	"unicode/utf8"
 	_ "unsafe" // for linkname
+
+	"github.com/charmbracelet/anthropic-sdk-go/internal/encoding/json/sentinel"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/encoding/json/shims"
 )
 
 // Marshal returns the JSON encoding of v.

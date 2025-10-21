@@ -8,13 +8,13 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/apijson"
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	"github.com/anthropics/anthropic-sdk-go/option"
-	"github.com/anthropics/anthropic-sdk-go/packages/param"
-	"github.com/anthropics/anthropic-sdk-go/packages/respjson"
-	"github.com/anthropics/anthropic-sdk-go/packages/ssestream"
-	"github.com/anthropics/anthropic-sdk-go/shared/constant"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apijson"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/param"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/respjson"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/ssestream"
+	"github.com/charmbracelet/anthropic-sdk-go/shared/constant"
 )
 
 // CompletionService contains methods and other services that help with interacting
@@ -33,7 +33,7 @@ type CompletionService struct {
 func NewCompletionService(opts ...option.RequestOption) (r CompletionService) {
 	r = CompletionService{}
 	r.Options = opts
-	return
+	return r
 }
 
 // [Legacy] Create a Text Completion.
@@ -53,7 +53,7 @@ func (r *CompletionService) New(ctx context.Context, params CompletionNewParams,
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/complete"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // [Legacy] Create a Text Completion.
@@ -118,6 +118,7 @@ type Completion struct {
 
 // Returns the unmodified JSON received from the API
 func (r Completion) RawJSON() string { return r.JSON.raw }
+
 func (r *Completion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -190,6 +191,7 @@ func (r CompletionNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow CompletionNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *CompletionNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

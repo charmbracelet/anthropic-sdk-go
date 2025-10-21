@@ -10,14 +10,14 @@ import (
 	"slices"
 	"time"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/apijson"
-	"github.com/anthropics/anthropic-sdk-go/internal/paramutil"
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	"github.com/anthropics/anthropic-sdk-go/option"
-	"github.com/anthropics/anthropic-sdk-go/packages/param"
-	"github.com/anthropics/anthropic-sdk-go/packages/respjson"
-	"github.com/anthropics/anthropic-sdk-go/packages/ssestream"
-	"github.com/anthropics/anthropic-sdk-go/shared/constant"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/apijson"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/paramutil"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	"github.com/charmbracelet/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/param"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/respjson"
+	"github.com/charmbracelet/anthropic-sdk-go/packages/ssestream"
+	"github.com/charmbracelet/anthropic-sdk-go/shared/constant"
 )
 
 // BetaMessageService contains methods and other services that help with
@@ -38,7 +38,7 @@ func NewBetaMessageService(opts ...option.RequestOption) (r BetaMessageService) 
 	r = BetaMessageService{}
 	r.Options = opts
 	r.Batches = NewBetaMessageBatchService(opts...)
-	return
+	return r
 }
 
 // Send a structured list of input messages with text and/or image content, and the
@@ -66,7 +66,7 @@ func (r *BetaMessageService) New(ctx context.Context, params BetaMessageNewParam
 
 	path := "v1/messages?beta=true"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Send a structured list of input messages with text and/or image content, and the
@@ -107,7 +107,7 @@ func (r *BetaMessageService) CountTokens(ctx context.Context, params BetaMessage
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/messages/count_tokens?beta=true"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // The properties Data, MediaType, Type are required.
@@ -124,6 +124,7 @@ func (r BetaBase64ImageSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaBase64ImageSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBase64ImageSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -154,6 +155,7 @@ func (r BetaBase64PDFBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaBase64PDFBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBase64PDFBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -177,6 +179,7 @@ func (u BetaBase64PDFBlockSourceUnionParam) MarshalJSON() ([]byte, error) {
 		u.OfURL,
 		u.OfFile)
 }
+
 func (u *BetaBase64PDFBlockSourceUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -365,6 +368,7 @@ type BetaBase64PDFSource struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaBase64PDFSource) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaBase64PDFSource) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -392,6 +396,7 @@ func (r BetaBase64PDFSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaBase64PDFSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBase64PDFSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -410,6 +415,7 @@ type BetaBashCodeExecutionOutputBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaBashCodeExecutionOutputBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaBashCodeExecutionOutputBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -427,6 +433,7 @@ func (r BetaBashCodeExecutionOutputBlockParam) MarshalJSON() (data []byte, err e
 	type shadow BetaBashCodeExecutionOutputBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBashCodeExecutionOutputBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -451,6 +458,7 @@ type BetaBashCodeExecutionResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaBashCodeExecutionResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaBashCodeExecutionResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -471,6 +479,7 @@ func (r BetaBashCodeExecutionResultBlockParam) MarshalJSON() (data []byte, err e
 	type shadow BetaBashCodeExecutionResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBashCodeExecutionResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -491,6 +500,7 @@ type BetaBashCodeExecutionToolResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaBashCodeExecutionToolResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaBashCodeExecutionToolResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -525,12 +535,12 @@ type BetaBashCodeExecutionToolResultBlockContentUnion struct {
 
 func (u BetaBashCodeExecutionToolResultBlockContentUnion) AsResponseBashCodeExecutionToolResultError() (v BetaBashCodeExecutionToolResultError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaBashCodeExecutionToolResultBlockContentUnion) AsResponseBashCodeExecutionResultBlock() (v BetaBashCodeExecutionResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -556,6 +566,7 @@ func (r BetaBashCodeExecutionToolResultBlockParam) MarshalJSON() (data []byte, e
 	type shadow BetaBashCodeExecutionToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBashCodeExecutionToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -572,6 +583,7 @@ type BetaBashCodeExecutionToolResultBlockParamContentUnion struct {
 func (u BetaBashCodeExecutionToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfRequestBashCodeExecutionToolResultError, u.OfRequestBashCodeExecutionResultBlock)
 }
+
 func (u *BetaBashCodeExecutionToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -651,6 +663,7 @@ type BetaBashCodeExecutionToolResultError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaBashCodeExecutionToolResultError) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaBashCodeExecutionToolResultError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -680,6 +693,7 @@ func (r BetaBashCodeExecutionToolResultErrorParam) MarshalJSON() (data []byte, e
 	type shadow BetaBashCodeExecutionToolResultErrorParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaBashCodeExecutionToolResultErrorParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -722,6 +736,7 @@ func (r BetaCacheControlEphemeralParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaCacheControlEphemeralParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCacheControlEphemeralParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -757,6 +772,7 @@ type BetaCacheCreation struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCacheCreation) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCacheCreation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -785,6 +801,7 @@ type BetaCitationCharLocation struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationCharLocation) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationCharLocation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -806,6 +823,7 @@ func (r BetaCitationCharLocationParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaCitationCharLocationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCitationCharLocationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -822,6 +840,7 @@ type BetaCitationConfig struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationConfig) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationConfig) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -850,6 +869,7 @@ type BetaCitationContentBlockLocation struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationContentBlockLocation) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationContentBlockLocation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -872,6 +892,7 @@ func (r BetaCitationContentBlockLocationParam) MarshalJSON() (data []byte, err e
 	type shadow BetaCitationContentBlockLocationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCitationContentBlockLocationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -900,6 +921,7 @@ type BetaCitationPageLocation struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationPageLocation) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationPageLocation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -921,6 +943,7 @@ func (r BetaCitationPageLocationParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaCitationPageLocationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCitationPageLocationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -949,6 +972,7 @@ type BetaCitationSearchResultLocation struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationSearchResultLocation) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationSearchResultLocation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -972,6 +996,7 @@ func (r BetaCitationSearchResultLocationParam) MarshalJSON() (data []byte, err e
 	type shadow BetaCitationSearchResultLocationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCitationSearchResultLocationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -992,6 +1017,7 @@ func (r BetaCitationWebSearchResultLocationParam) MarshalJSON() (data []byte, er
 	type shadow BetaCitationWebSearchResultLocationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCitationWebSearchResultLocationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1005,6 +1031,7 @@ func (r BetaCitationsConfigParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaCitationsConfigParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCitationsConfigParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1023,6 +1050,7 @@ type BetaCitationsDelta struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationsDelta) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationsDelta) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1125,27 +1153,27 @@ func (u BetaCitationsDeltaCitationUnion) AsAny() anyBetaCitationsDeltaCitation {
 
 func (u BetaCitationsDeltaCitationUnion) AsCharLocation() (v BetaCitationCharLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaCitationsDeltaCitationUnion) AsPageLocation() (v BetaCitationPageLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaCitationsDeltaCitationUnion) AsContentBlockLocation() (v BetaCitationContentBlockLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaCitationsDeltaCitationUnion) AsWebSearchResultLocation() (v BetaCitationsWebSearchResultLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaCitationsDeltaCitationUnion) AsSearchResultLocation() (v BetaCitationSearchResultLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -1175,6 +1203,7 @@ type BetaCitationsWebSearchResultLocation struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCitationsWebSearchResultLocation) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCitationsWebSearchResultLocation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1202,6 +1231,7 @@ func (r BetaClearToolUses20250919EditParam) MarshalJSON() (data []byte, err erro
 	type shadow BetaClearToolUses20250919EditParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaClearToolUses20250919EditParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1218,6 +1248,7 @@ type BetaClearToolUses20250919EditClearToolInputsUnionParam struct {
 func (u BetaClearToolUses20250919EditClearToolInputsUnionParam) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfBool, u.OfStringArray)
 }
+
 func (u *BetaClearToolUses20250919EditClearToolInputsUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -1243,6 +1274,7 @@ type BetaClearToolUses20250919EditTriggerUnionParam struct {
 func (u BetaClearToolUses20250919EditTriggerUnionParam) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfInputTokens, u.OfToolUses)
 }
+
 func (u *BetaClearToolUses20250919EditTriggerUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -1304,6 +1336,7 @@ type BetaClearToolUses20250919EditResponse struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaClearToolUses20250919EditResponse) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaClearToolUses20250919EditResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1322,6 +1355,7 @@ type BetaCodeExecutionOutputBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCodeExecutionOutputBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCodeExecutionOutputBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1339,6 +1373,7 @@ func (r BetaCodeExecutionOutputBlockParam) MarshalJSON() (data []byte, err error
 	type shadow BetaCodeExecutionOutputBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCodeExecutionOutputBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1363,6 +1398,7 @@ type BetaCodeExecutionResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCodeExecutionResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCodeExecutionResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1383,6 +1419,7 @@ func (r BetaCodeExecutionResultBlockParam) MarshalJSON() (data []byte, err error
 	type shadow BetaCodeExecutionResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCodeExecutionResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1407,6 +1444,7 @@ func (r BetaCodeExecutionTool20250522Param) MarshalJSON() (data []byte, err erro
 	type shadow BetaCodeExecutionTool20250522Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCodeExecutionTool20250522Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1431,6 +1469,7 @@ func (r BetaCodeExecutionTool20250825Param) MarshalJSON() (data []byte, err erro
 	type shadow BetaCodeExecutionTool20250825Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCodeExecutionTool20250825Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1451,6 +1490,7 @@ type BetaCodeExecutionToolResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCodeExecutionToolResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCodeExecutionToolResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1485,12 +1525,12 @@ type BetaCodeExecutionToolResultBlockContentUnion struct {
 
 func (u BetaCodeExecutionToolResultBlockContentUnion) AsResponseCodeExecutionToolResultError() (v BetaCodeExecutionToolResultError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaCodeExecutionToolResultBlockContentUnion) AsResponseCodeExecutionResultBlock() (v BetaCodeExecutionResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -1516,6 +1556,7 @@ func (r BetaCodeExecutionToolResultBlockParam) MarshalJSON() (data []byte, err e
 	type shadow BetaCodeExecutionToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCodeExecutionToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1538,6 +1579,7 @@ type BetaCodeExecutionToolResultBlockParamContentUnion struct {
 func (u BetaCodeExecutionToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfError, u.OfResultBlock)
 }
+
 func (u *BetaCodeExecutionToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -1617,6 +1659,7 @@ type BetaCodeExecutionToolResultError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCodeExecutionToolResultError) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCodeExecutionToolResultError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1645,6 +1688,7 @@ func (r BetaCodeExecutionToolResultErrorParam) MarshalJSON() (data []byte, err e
 	type shadow BetaCodeExecutionToolResultErrorParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaCodeExecutionToolResultErrorParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1667,6 +1711,7 @@ type BetaContainer struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaContainer) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaContainer) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1686,6 +1731,7 @@ type BetaContainerUploadBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaContainerUploadBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaContainerUploadBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1707,6 +1753,7 @@ func (r BetaContainerUploadBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaContainerUploadBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaContainerUploadBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -1866,67 +1913,67 @@ func (u BetaContentBlockUnion) AsAny() anyBetaContentBlock {
 
 func (u BetaContentBlockUnion) AsText() (v BetaTextBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsThinking() (v BetaThinkingBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsRedactedThinking() (v BetaRedactedThinkingBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsToolUse() (v BetaToolUseBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsServerToolUse() (v BetaServerToolUseBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsWebSearchToolResult() (v BetaWebSearchToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsWebFetchToolResult() (v BetaWebFetchToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsCodeExecutionToolResult() (v BetaCodeExecutionToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsBashCodeExecutionToolResult() (v BetaBashCodeExecutionToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsTextEditorCodeExecutionToolResult() (v BetaTextEditorCodeExecutionToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsMCPToolUse() (v BetaMCPToolUseBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsMCPToolResult() (v BetaMCPToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaContentBlockUnion) AsContainerUpload() (v BetaContainerUploadBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -2281,6 +2328,7 @@ func (u BetaContentBlockParamUnion) MarshalJSON() ([]byte, error) {
 		u.OfMCPToolResult,
 		u.OfContainerUpload)
 }
+
 func (u *BetaContentBlockParamUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -2531,7 +2579,7 @@ func (u BetaContentBlockParamUnion) GetCitations() (res betaContentBlockParamUni
 	} else if vt := u.OfSearchResult; vt != nil {
 		res.any = &vt.Citations
 	}
-	return
+	return res
 }
 
 // Can have the runtime types [*[]BetaTextCitationParamUnion],
@@ -2568,7 +2616,7 @@ func (u BetaContentBlockParamUnion) GetSource() (res betaContentBlockParamUnionS
 	} else if vt := u.OfSearchResult; vt != nil {
 		res.any = &vt.Source
 	}
-	return
+	return res
 }
 
 // Can have the runtime types [*BetaBase64ImageSourceParam],
@@ -2680,7 +2728,7 @@ func (u BetaContentBlockParamUnion) GetContent() (res betaContentBlockParamUnion
 	} else if vt := u.OfMCPToolResult; vt != nil {
 		res.any = vt.Content.asAny()
 	}
-	return
+	return res
 }
 
 // Can have the runtime types [_[]BetaTextBlockParam],
@@ -2963,6 +3011,7 @@ func (r BetaContentBlockSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaContentBlockSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaContentBlockSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -2979,6 +3028,7 @@ type BetaContentBlockSourceContentUnionParam struct {
 func (u BetaContentBlockSourceContentUnionParam) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfString, u.OfBetaContentBlockSourceContent)
 }
+
 func (u *BetaContentBlockSourceContentUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -3003,6 +3053,7 @@ func (r BetaContextManagementConfigParam) MarshalJSON() (data []byte, err error)
 	type shadow BetaContextManagementConfigParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaContextManagementConfigParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3021,6 +3072,7 @@ type BetaContextManagementResponse struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaContextManagementResponse) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaContextManagementResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3038,6 +3090,7 @@ type BetaCountTokensContextManagementResponse struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaCountTokensContextManagementResponse) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaCountTokensContextManagementResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3062,6 +3115,7 @@ type BetaDocumentBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaDocumentBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaDocumentBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3115,12 +3169,12 @@ func (u BetaDocumentBlockSourceUnion) AsAny() anyBetaDocumentBlockSource {
 
 func (u BetaDocumentBlockSourceUnion) AsBase64() (v BetaBase64PDFSource) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaDocumentBlockSourceUnion) AsText() (v BetaPlainTextSource) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -3142,6 +3196,7 @@ func (r BetaFileDocumentSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaFileDocumentSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaFileDocumentSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3158,6 +3213,7 @@ func (r BetaFileImageSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaFileImageSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaFileImageSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3176,6 +3232,7 @@ func (r BetaImageBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaImageBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaImageBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3193,6 +3250,7 @@ type BetaImageBlockParamSourceUnion struct {
 func (u BetaImageBlockParamSourceUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfBase64, u.OfURL, u.OfFile)
 }
+
 func (u *BetaImageBlockParamSourceUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -3266,6 +3324,7 @@ type BetaInputJSONDelta struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaInputJSONDelta) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaInputJSONDelta) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3282,6 +3341,7 @@ func (r BetaInputTokensClearAtLeastParam) MarshalJSON() (data []byte, err error)
 	type shadow BetaInputTokensClearAtLeastParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaInputTokensClearAtLeastParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3298,6 +3358,7 @@ func (r BetaInputTokensTriggerParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaInputTokensTriggerParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaInputTokensTriggerParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3320,6 +3381,7 @@ type BetaMCPToolResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMCPToolResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMCPToolResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3346,12 +3408,12 @@ type BetaMCPToolResultBlockContentUnion struct {
 
 func (u BetaMCPToolResultBlockContentUnion) AsString() (v string) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaMCPToolResultBlockContentUnion) AsBetaMCPToolResultBlockContent() (v []BetaTextBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -3383,6 +3445,7 @@ type BetaMCPToolUseBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMCPToolUseBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMCPToolUseBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3405,6 +3468,7 @@ func (r BetaMCPToolUseBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaMCPToolUseBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaMCPToolUseBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3428,6 +3492,7 @@ func (r BetaMemoryTool20250818Param) MarshalJSON() (data []byte, err error) {
 	type shadow BetaMemoryTool20250818Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaMemoryTool20250818Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3523,32 +3588,32 @@ func (u BetaMemoryTool20250818CommandUnion) AsAny() anyBetaMemoryTool20250818Com
 
 func (u BetaMemoryTool20250818CommandUnion) AsView() (v BetaMemoryTool20250818ViewCommand) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaMemoryTool20250818CommandUnion) AsCreate() (v BetaMemoryTool20250818CreateCommand) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaMemoryTool20250818CommandUnion) AsStrReplace() (v BetaMemoryTool20250818StrReplaceCommand) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaMemoryTool20250818CommandUnion) AsInsert() (v BetaMemoryTool20250818InsertCommand) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaMemoryTool20250818CommandUnion) AsDelete() (v BetaMemoryTool20250818DeleteCommand) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaMemoryTool20250818CommandUnion) AsRename() (v BetaMemoryTool20250818RenameCommand) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -3577,6 +3642,7 @@ type BetaMemoryTool20250818CreateCommand struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMemoryTool20250818CreateCommand) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMemoryTool20250818CreateCommand) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3597,6 +3663,7 @@ type BetaMemoryTool20250818DeleteCommand struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMemoryTool20250818DeleteCommand) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMemoryTool20250818DeleteCommand) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3623,6 +3690,7 @@ type BetaMemoryTool20250818InsertCommand struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMemoryTool20250818InsertCommand) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMemoryTool20250818InsertCommand) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3646,6 +3714,7 @@ type BetaMemoryTool20250818RenameCommand struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMemoryTool20250818RenameCommand) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMemoryTool20250818RenameCommand) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3672,6 +3741,7 @@ type BetaMemoryTool20250818StrReplaceCommand struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMemoryTool20250818StrReplaceCommand) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMemoryTool20250818StrReplaceCommand) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3695,6 +3765,7 @@ type BetaMemoryTool20250818ViewCommand struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMemoryTool20250818ViewCommand) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMemoryTool20250818ViewCommand) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3815,6 +3886,7 @@ type BetaMessage struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMessage) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMessage) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3875,6 +3947,7 @@ type BetaMessageDeltaUsage struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMessageDeltaUsage) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMessageDeltaUsage) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3898,6 +3971,7 @@ func (r BetaMessageParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaMessageParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaMessageParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3926,6 +4000,7 @@ type BetaMessageTokensCount struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaMessageTokensCount) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaMessageTokensCount) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3944,6 +4019,7 @@ func (r BetaMetadataParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaMetadataParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaMetadataParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3964,6 +4040,7 @@ type BetaPlainTextSource struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaPlainTextSource) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaPlainTextSource) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -3991,6 +4068,7 @@ func (r BetaPlainTextSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaPlainTextSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaPlainTextSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4069,27 +4147,27 @@ func (u BetaRawContentBlockDeltaUnion) AsAny() anyBetaRawContentBlockDelta {
 
 func (u BetaRawContentBlockDeltaUnion) AsTextDelta() (v BetaTextDelta) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockDeltaUnion) AsInputJSONDelta() (v BetaInputJSONDelta) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockDeltaUnion) AsCitationsDelta() (v BetaCitationsDelta) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockDeltaUnion) AsThinkingDelta() (v BetaThinkingDelta) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockDeltaUnion) AsSignatureDelta() (v BetaSignatureDelta) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -4115,6 +4193,7 @@ type BetaRawContentBlockDeltaEvent struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawContentBlockDeltaEvent) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawContentBlockDeltaEvent) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4136,6 +4215,7 @@ type BetaRawContentBlockStartEvent struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawContentBlockStartEvent) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawContentBlockStartEvent) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4279,67 +4359,67 @@ func (u BetaRawContentBlockStartEventContentBlockUnion) AsAny() anyBetaRawConten
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsText() (v BetaTextBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsThinking() (v BetaThinkingBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsRedactedThinking() (v BetaRedactedThinkingBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsToolUse() (v BetaToolUseBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsServerToolUse() (v BetaServerToolUseBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsWebSearchToolResult() (v BetaWebSearchToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsWebFetchToolResult() (v BetaWebFetchToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsCodeExecutionToolResult() (v BetaCodeExecutionToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsBashCodeExecutionToolResult() (v BetaBashCodeExecutionToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsTextEditorCodeExecutionToolResult() (v BetaTextEditorCodeExecutionToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsMCPToolUse() (v BetaMCPToolUseBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsMCPToolResult() (v BetaMCPToolResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawContentBlockStartEventContentBlockUnion) AsContainerUpload() (v BetaContainerUploadBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -4498,6 +4578,7 @@ type BetaRawContentBlockStopEvent struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawContentBlockStopEvent) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawContentBlockStopEvent) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4536,6 +4617,7 @@ type BetaRawMessageDeltaEvent struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawMessageDeltaEvent) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawMessageDeltaEvent) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4560,6 +4642,7 @@ type BetaRawMessageDeltaEventDelta struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawMessageDeltaEventDelta) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawMessageDeltaEventDelta) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4578,6 +4661,7 @@ type BetaRawMessageStartEvent struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawMessageStartEvent) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawMessageStartEvent) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4594,6 +4678,7 @@ type BetaRawMessageStopEvent struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRawMessageStopEvent) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRawMessageStopEvent) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4680,32 +4765,32 @@ func (u BetaRawMessageStreamEventUnion) AsAny() anyBetaRawMessageStreamEvent {
 
 func (u BetaRawMessageStreamEventUnion) AsMessageStart() (v BetaRawMessageStartEvent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawMessageStreamEventUnion) AsMessageDelta() (v BetaRawMessageDeltaEvent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawMessageStreamEventUnion) AsMessageStop() (v BetaRawMessageStopEvent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawMessageStreamEventUnion) AsContentBlockStart() (v BetaRawContentBlockStartEvent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawMessageStreamEventUnion) AsContentBlockDelta() (v BetaRawContentBlockDeltaEvent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaRawMessageStreamEventUnion) AsContentBlockStop() (v BetaRawContentBlockStopEvent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -4848,6 +4933,7 @@ type BetaRedactedThinkingBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRedactedThinkingBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaRedactedThinkingBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4872,6 +4958,7 @@ func (r BetaRedactedThinkingBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaRedactedThinkingBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaRedactedThinkingBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4893,6 +4980,7 @@ func (r BetaRequestDocumentBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaRequestDocumentBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaRequestDocumentBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -4916,6 +5004,7 @@ func (u BetaRequestDocumentBlockSourceUnionParam) MarshalJSON() ([]byte, error) 
 		u.OfURL,
 		u.OfFile)
 }
+
 func (u *BetaRequestDocumentBlockSourceUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -5005,6 +5094,7 @@ func (r BetaRequestMCPServerToolConfigurationParam) MarshalJSON() (data []byte, 
 	type shadow BetaRequestMCPServerToolConfigurationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaRequestMCPServerToolConfigurationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5024,6 +5114,7 @@ func (r BetaRequestMCPServerURLDefinitionParam) MarshalJSON() (data []byte, err 
 	type shadow BetaRequestMCPServerURLDefinitionParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaRequestMCPServerURLDefinitionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5044,6 +5135,7 @@ func (r BetaRequestMCPToolResultBlockParam) MarshalJSON() (data []byte, err erro
 	type shadow BetaRequestMCPToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaRequestMCPToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5060,6 +5152,7 @@ type BetaRequestMCPToolResultBlockParamContentUnion struct {
 func (u BetaRequestMCPToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfString, u.OfBetaMCPToolResultBlockContent)
 }
+
 func (u *BetaRequestMCPToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -5090,6 +5183,7 @@ func (r BetaSearchResultBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaSearchResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaSearchResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5110,6 +5204,7 @@ type BetaServerToolUsage struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaServerToolUsage) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaServerToolUsage) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5134,6 +5229,7 @@ type BetaServerToolUseBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaServerToolUseBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaServerToolUseBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5166,6 +5262,7 @@ func (r BetaServerToolUseBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaServerToolUseBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaServerToolUseBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5194,6 +5291,7 @@ type BetaSignatureDelta struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaSignatureDelta) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaSignatureDelta) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5231,6 +5329,7 @@ type BetaTextBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5294,6 +5393,7 @@ func (r BetaTextBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaTextBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaTextBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5395,27 +5495,27 @@ func (u BetaTextCitationUnion) AsAny() anyBetaTextCitation {
 
 func (u BetaTextCitationUnion) AsCharLocation() (v BetaCitationCharLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextCitationUnion) AsPageLocation() (v BetaCitationPageLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextCitationUnion) AsContentBlockLocation() (v BetaCitationContentBlockLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextCitationUnion) AsWebSearchResultLocation() (v BetaCitationsWebSearchResultLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextCitationUnion) AsSearchResultLocation() (v BetaCitationSearchResultLocation) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -5444,6 +5544,7 @@ func (u BetaTextCitationParamUnion) MarshalJSON() ([]byte, error) {
 		u.OfWebSearchResultLocation,
 		u.OfSearchResultLocation)
 }
+
 func (u *BetaTextCitationParamUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -5627,6 +5728,7 @@ type BetaTextDelta struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextDelta) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextDelta) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5645,6 +5747,7 @@ type BetaTextEditorCodeExecutionCreateResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextEditorCodeExecutionCreateResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextEditorCodeExecutionCreateResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5662,6 +5765,7 @@ func (r BetaTextEditorCodeExecutionCreateResultBlockParam) MarshalJSON() (data [
 	type shadow BetaTextEditorCodeExecutionCreateResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaTextEditorCodeExecutionCreateResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5688,6 +5792,7 @@ type BetaTextEditorCodeExecutionStrReplaceResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextEditorCodeExecutionStrReplaceResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextEditorCodeExecutionStrReplaceResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5709,6 +5814,7 @@ func (r BetaTextEditorCodeExecutionStrReplaceResultBlockParam) MarshalJSON() (da
 	type shadow BetaTextEditorCodeExecutionStrReplaceResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaTextEditorCodeExecutionStrReplaceResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5729,6 +5835,7 @@ type BetaTextEditorCodeExecutionToolResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextEditorCodeExecutionToolResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextEditorCodeExecutionToolResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5789,22 +5896,22 @@ type BetaTextEditorCodeExecutionToolResultBlockContentUnion struct {
 
 func (u BetaTextEditorCodeExecutionToolResultBlockContentUnion) AsResponseTextEditorCodeExecutionToolResultError() (v BetaTextEditorCodeExecutionToolResultError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextEditorCodeExecutionToolResultBlockContentUnion) AsResponseTextEditorCodeExecutionViewResultBlock() (v BetaTextEditorCodeExecutionViewResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextEditorCodeExecutionToolResultBlockContentUnion) AsResponseTextEditorCodeExecutionCreateResultBlock() (v BetaTextEditorCodeExecutionCreateResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaTextEditorCodeExecutionToolResultBlockContentUnion) AsResponseTextEditorCodeExecutionStrReplaceResultBlock() (v BetaTextEditorCodeExecutionStrReplaceResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -5830,6 +5937,7 @@ func (r BetaTextEditorCodeExecutionToolResultBlockParam) MarshalJSON() (data []b
 	type shadow BetaTextEditorCodeExecutionToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaTextEditorCodeExecutionToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -5848,6 +5956,7 @@ type BetaTextEditorCodeExecutionToolResultBlockParamContentUnion struct {
 func (u BetaTextEditorCodeExecutionToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfRequestTextEditorCodeExecutionToolResultError, u.OfRequestTextEditorCodeExecutionViewResultBlock, u.OfRequestTextEditorCodeExecutionCreateResultBlock, u.OfRequestTextEditorCodeExecutionStrReplaceResultBlock)
 }
+
 func (u *BetaTextEditorCodeExecutionToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -6001,6 +6110,7 @@ type BetaTextEditorCodeExecutionToolResultError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextEditorCodeExecutionToolResultError) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextEditorCodeExecutionToolResultError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6031,6 +6141,7 @@ func (r BetaTextEditorCodeExecutionToolResultErrorParam) MarshalJSON() (data []b
 	type shadow BetaTextEditorCodeExecutionToolResultErrorParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaTextEditorCodeExecutionToolResultErrorParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6068,6 +6179,7 @@ type BetaTextEditorCodeExecutionViewResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaTextEditorCodeExecutionViewResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaTextEditorCodeExecutionViewResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6098,6 +6210,7 @@ func (r BetaTextEditorCodeExecutionViewResultBlockParam) MarshalJSON() (data []b
 	type shadow BetaTextEditorCodeExecutionViewResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaTextEditorCodeExecutionViewResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6126,6 +6239,7 @@ type BetaThinkingBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaThinkingBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaThinkingBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6151,6 +6265,7 @@ func (r BetaThinkingBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaThinkingBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaThinkingBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6172,6 +6287,7 @@ func (r BetaThinkingConfigDisabledParam) MarshalJSON() (data []byte, err error) 
 	type shadow BetaThinkingConfigDisabledParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaThinkingConfigDisabledParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6197,6 +6313,7 @@ func (r BetaThinkingConfigEnabledParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaThinkingConfigEnabledParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaThinkingConfigEnabledParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6219,6 +6336,7 @@ type BetaThinkingConfigParamUnion struct {
 func (u BetaThinkingConfigParamUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfEnabled, u.OfDisabled)
 }
+
 func (u *BetaThinkingConfigParamUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -6264,6 +6382,7 @@ type BetaThinkingDelta struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaThinkingDelta) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaThinkingDelta) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6297,6 +6416,7 @@ func (r BetaToolParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6320,6 +6440,7 @@ func (r BetaToolInputSchemaParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolInputSchemaParam
 	return param.MarshalWithExtras(r, (*shadow)(&r), r.ExtraFields)
 }
+
 func (r *BetaToolInputSchemaParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6349,6 +6470,7 @@ func (r BetaToolBash20241022Param) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolBash20241022Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolBash20241022Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6372,6 +6494,7 @@ func (r BetaToolBash20250124Param) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolBash20250124Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolBash20250124Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6396,6 +6519,7 @@ type BetaToolChoiceUnionParam struct {
 func (u BetaToolChoiceUnionParam) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfAuto, u.OfAny, u.OfTool, u.OfNone)
 }
+
 func (u *BetaToolChoiceUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -6465,6 +6589,7 @@ func (r BetaToolChoiceAnyParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolChoiceAnyParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolChoiceAnyParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6487,6 +6612,7 @@ func (r BetaToolChoiceAutoParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolChoiceAutoParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolChoiceAutoParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6510,6 +6636,7 @@ func (r BetaToolChoiceNoneParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolChoiceNoneParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolChoiceNoneParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6534,6 +6661,7 @@ func (r BetaToolChoiceToolParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolChoiceToolParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolChoiceToolParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6564,6 +6692,7 @@ func (r BetaToolComputerUse20241022Param) MarshalJSON() (data []byte, err error)
 	type shadow BetaToolComputerUse20241022Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolComputerUse20241022Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6594,6 +6723,7 @@ func (r BetaToolComputerUse20250124Param) MarshalJSON() (data []byte, err error)
 	type shadow BetaToolComputerUse20250124Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolComputerUse20250124Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6614,6 +6744,7 @@ func (r BetaToolResultBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6632,6 +6763,7 @@ type BetaToolResultBlockParamContentUnion struct {
 func (u BetaToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfText, u.OfImage, u.OfSearchResult, u.OfDocument)
 }
+
 func (u *BetaToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -6722,7 +6854,7 @@ func (u BetaToolResultBlockParamContentUnion) GetCitations() (res betaToolResult
 	} else if vt := u.OfDocument; vt != nil {
 		res.any = &vt.Citations
 	}
-	return
+	return res
 }
 
 // Can have the runtime types [*[]BetaTextCitationParamUnion],
@@ -6759,7 +6891,7 @@ func (u BetaToolResultBlockParamContentUnion) GetSource() (res betaToolResultBlo
 	} else if vt := u.OfDocument; vt != nil {
 		res.any = vt.Source.asAny()
 	}
-	return
+	return res
 }
 
 // Can have the runtime types [*BetaBase64ImageSourceParam],
@@ -6871,6 +7003,7 @@ func (r BetaToolTextEditor20241022Param) MarshalJSON() (data []byte, err error) 
 	type shadow BetaToolTextEditor20241022Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolTextEditor20241022Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6896,6 +7029,7 @@ func (r BetaToolTextEditor20250124Param) MarshalJSON() (data []byte, err error) 
 	type shadow BetaToolTextEditor20250124Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolTextEditor20250124Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6921,6 +7055,7 @@ func (r BetaToolTextEditor20250429Param) MarshalJSON() (data []byte, err error) 
 	type shadow BetaToolTextEditor20250429Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolTextEditor20250429Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -6949,6 +7084,7 @@ func (r BetaToolTextEditor20250728Param) MarshalJSON() (data []byte, err error) 
 	type shadow BetaToolTextEditor20250728Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolTextEditor20250728Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7011,6 +7147,7 @@ func (u BetaToolUnionParam) MarshalJSON() ([]byte, error) {
 		u.OfWebSearchTool20250305,
 		u.OfWebFetchTool20250910)
 }
+
 func (u *BetaToolUnionParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -7278,6 +7415,7 @@ type BetaToolUseBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaToolUseBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaToolUseBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7307,6 +7445,7 @@ func (r BetaToolUseBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolUseBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolUseBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7323,6 +7462,7 @@ func (r BetaToolUsesKeepParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolUsesKeepParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolUsesKeepParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7339,6 +7479,7 @@ func (r BetaToolUsesTriggerParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaToolUsesTriggerParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaToolUsesTriggerParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7355,6 +7496,7 @@ func (r BetaURLImageSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaURLImageSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaURLImageSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7371,6 +7513,7 @@ func (r BetaURLPDFSourceParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaURLPDFSourceParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaURLPDFSourceParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7408,6 +7551,7 @@ type BetaUsage struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaUsage) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaUsage) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7441,6 +7585,7 @@ type BetaWebFetchBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaWebFetchBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaWebFetchBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7461,6 +7606,7 @@ func (r BetaWebFetchBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaWebFetchBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebFetchBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7497,6 +7643,7 @@ func (r BetaWebFetchTool20250910Param) MarshalJSON() (data []byte, err error) {
 	type shadow BetaWebFetchTool20250910Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebFetchTool20250910Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7517,6 +7664,7 @@ type BetaWebFetchToolResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaWebFetchToolResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaWebFetchToolResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7547,12 +7695,12 @@ type BetaWebFetchToolResultBlockContentUnion struct {
 
 func (u BetaWebFetchToolResultBlockContentUnion) AsResponseWebFetchToolResultError() (v BetaWebFetchToolResultErrorBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaWebFetchToolResultBlockContentUnion) AsResponseWebFetchResultBlock() (v BetaWebFetchBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -7578,6 +7726,7 @@ func (r BetaWebFetchToolResultBlockParam) MarshalJSON() (data []byte, err error)
 	type shadow BetaWebFetchToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebFetchToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7594,6 +7743,7 @@ type BetaWebFetchToolResultBlockParamContentUnion struct {
 func (u BetaWebFetchToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfRequestWebFetchToolResultError, u.OfRequestWebFetchResultBlock)
 }
+
 func (u *BetaWebFetchToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -7666,6 +7816,7 @@ type BetaWebFetchToolResultErrorBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaWebFetchToolResultErrorBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaWebFetchToolResultErrorBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7686,6 +7837,7 @@ func (r BetaWebFetchToolResultErrorBlockParam) MarshalJSON() (data []byte, err e
 	type shadow BetaWebFetchToolResultErrorBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebFetchToolResultErrorBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7723,6 +7875,7 @@ type BetaWebSearchResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaWebSearchResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaWebSearchResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7743,6 +7896,7 @@ func (r BetaWebSearchResultBlockParam) MarshalJSON() (data []byte, err error) {
 	type shadow BetaWebSearchResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebSearchResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7778,6 +7932,7 @@ func (r BetaWebSearchTool20250305Param) MarshalJSON() (data []byte, err error) {
 	type shadow BetaWebSearchTool20250305Param
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebSearchTool20250305Param) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7806,6 +7961,7 @@ func (r BetaWebSearchTool20250305UserLocationParam) MarshalJSON() (data []byte, 
 	type shadow BetaWebSearchTool20250305UserLocationParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebSearchTool20250305UserLocationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7825,6 +7981,7 @@ func (r BetaWebSearchToolRequestErrorParam) MarshalJSON() (data []byte, err erro
 	type shadow BetaWebSearchToolRequestErrorParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebSearchToolRequestErrorParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7845,6 +8002,7 @@ type BetaWebSearchToolResultBlock struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaWebSearchToolResultBlock) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaWebSearchToolResultBlock) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7874,12 +8032,12 @@ type BetaWebSearchToolResultBlockContentUnion struct {
 
 func (u BetaWebSearchToolResultBlockContentUnion) AsResponseWebSearchToolResultError() (v BetaWebSearchToolResultError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 func (u BetaWebSearchToolResultBlockContentUnion) AsBetaWebSearchResultBlockArray() (v []BetaWebSearchResultBlock) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
+	return v
 }
 
 // Returns the unmodified JSON received from the API
@@ -7905,6 +8063,7 @@ func (r BetaWebSearchToolResultBlockParam) MarshalJSON() (data []byte, err error
 	type shadow BetaWebSearchToolResultBlockParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaWebSearchToolResultBlockParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -7927,6 +8086,7 @@ type BetaWebSearchToolResultBlockParamContentUnion struct {
 func (u BetaWebSearchToolResultBlockParamContentUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfResultBlock, u.OfError)
 }
+
 func (u *BetaWebSearchToolResultBlockParamContentUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -7956,6 +8116,7 @@ type BetaWebSearchToolResultError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaWebSearchToolResultError) RawJSON() string { return r.JSON.raw }
+
 func (r *BetaWebSearchToolResultError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -8216,6 +8377,7 @@ func (r BetaMessageNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow BetaMessageNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaMessageNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -8421,6 +8583,7 @@ func (r BetaMessageCountTokensParams) MarshalJSON() (data []byte, err error) {
 	type shadow BetaMessageCountTokensParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
 func (r *BetaMessageCountTokensParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -8437,6 +8600,7 @@ type BetaMessageCountTokensParamsSystemUnion struct {
 func (u BetaMessageCountTokensParamsSystemUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion(u, u.OfString, u.OfBetaTextBlockArray)
 }
+
 func (u *BetaMessageCountTokensParamsSystemUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
@@ -8487,6 +8651,7 @@ func (u BetaMessageCountTokensParamsToolUnion) MarshalJSON() ([]byte, error) {
 		u.OfWebSearchTool20250305,
 		u.OfWebFetchTool20250910)
 }
+
 func (u *BetaMessageCountTokensParamsToolUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }

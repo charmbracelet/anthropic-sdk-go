@@ -12,8 +12,8 @@ import (
 	"google.golang.org/api/transport"
 	thttp "google.golang.org/api/transport/http"
 
-	"github.com/anthropics/anthropic-sdk-go/internal/requestconfig"
-	sdkoption "github.com/anthropics/anthropic-sdk-go/option"
+	"github.com/charmbracelet/anthropic-sdk-go/internal/requestconfig"
+	sdkoption "github.com/charmbracelet/anthropic-sdk-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
