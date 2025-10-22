@@ -51,7 +51,7 @@ func WithCredentials(ctx context.Context, region string, projectID string, creds
 
 	return requestconfig.RequestOptionFunc(func(rc *requestconfig.RequestConfig) error {
 		getClient := func() (*http.Client, error) {
-			if rc.HTTPClient.Transport == nil {
+			if rc.HTTPClient == nil || rc.HTTPClient.Transport == nil {
 				c, _, err := transport.NewHTTPClient(ctx, option.WithTokenSource(creds.TokenSource))
 				return c, err
 			}
