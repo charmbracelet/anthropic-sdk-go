@@ -234,12 +234,6 @@ func bedrockMiddleware(signer *v4.Signer, cfg aws.Config) option.Middleware {
 		switch {
 		case os.Getenv("AWS_BEARER_TOKEN_BEDROCK") != "":
 			r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", os.Getenv("AWS_BEARER_TOKEN_BEDROCK")))
-		case cfg.BearerAuthTokenProvider != nil:
-			token, err := cfg.BearerAuthTokenProvider.RetrieveBearerToken(ctx)
-			if err != nil {
-				return nil, err
-			}
-			r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token.Value))
 		case cfg.Credentials != nil:
 			credentials, err := cfg.Credentials.Retrieve(ctx)
 			if err != nil {
@@ -250,6 +244,12 @@ func bedrockMiddleware(signer *v4.Signer, cfg aws.Config) option.Middleware {
 			if err != nil {
 				return nil, err
 			}
+		case cfg.BearerAuthTokenProvider != nil:
+			token, err := cfg.BearerAuthTokenProvider.RetrieveBearerToken(ctx)
+			if err != nil {
+				return nil, err
+			}
+			r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token.Value))
 		default:
 			return nil, fmt.Errorf("no credentials or bearer token provider given")
 		}
