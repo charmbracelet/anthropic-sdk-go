@@ -19,6 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream/eventstreamapi"
 	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/smithy-go/auth/bearer"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 
@@ -32,6 +33,15 @@ const DefaultVersion = "bedrock-2023-05-31"
 var DefaultEndpoints = map[string]bool{
 	"/v1/complete": true,
 	"/v1/messages": true,
+}
+
+func NewStaticBearerTokenProvider(token string) *bearer.StaticTokenProvider {
+	return &bearer.StaticTokenProvider{
+		Token: bearer.Token{
+			Value:     token,
+			CanExpire: false,
+		},
+	}
 }
 
 type eventstreamChunk struct {
@@ -174,13 +184,30 @@ func WithLoadDefaultConfig(ctx context.Context, optFns ...func(*config.LoadOptio
 	return WithConfig(cfg)
 }
 
-// WithConfig returns a request option which uses the provided config  and registers middleware that
-// intercepts request to the Messages API so that this SDK can be used with Amazon Bedrock.
+// WithConfig returns a request option that uses the provided config and registers middleware to
+// intercept requests to the Messages API, enabling this SDK to work with Amazon Bedrock.
+//
+// Authentication is determined as follows: if the AWS_BEARER_TOKEN_BEDROCK environment variable is
+// set, it is used for bearer token authentication. Otherwise, if cfg.BearerAuthTokenProvider is set,
+// it is used. If neither is available, cfg.Credentials is used for AWS SigV4 signing and must be set.
 func WithConfig(cfg aws.Config) option.RequestOption {
+	var credentialErr error
+
+	if cfg.BearerAuthTokenProvider == nil {
+		if token := os.Getenv("AWS_BEARER_TOKEN_BEDROCK"); token != "" {
+			cfg.BearerAuthTokenProvider = NewStaticBearerTokenProvider(token)
+		}
+	} else if cfg.BearerAuthTokenProvider == nil && cfg.Credentials == nil {
+		credentialErr = fmt.Errorf("expected AWS credentials to be set")
+	}
+
 	signer := v4.NewSigner()
 	middleware := bedrockMiddleware(signer, cfg)
 
 	return requestconfig.RequestOptionFunc(func(rc *requestconfig.RequestConfig) error {
+		if credentialErr != nil {
+			return credentialErr
+		}
 		return rc.Apply(
 			option.WithBaseURL(fmt.Sprintf("https://bedrock-runtime.%s.amazonaws.com", cfg.Region)),
 			option.WithMiddleware(middleware),
@@ -200,6 +227,15 @@ func bedrockMiddleware(signer *v4.Signer, cfg aws.Config) option.Middleware {
 
 			if !gjson.GetBytes(body, "anthropic_version").Exists() {
 				body, _ = sjson.SetBytes(body, "anthropic_version", DefaultVersion)
+			}
+
+			// pull the betas off of the header (if set) and put them in the body
+			if betaHeader := r.Header.Values("anthropic-beta"); len(betaHeader) > 0 {
+				r.Header.Del("anthropic-beta")
+				body, err = sjson.SetBytes(body, "anthropic_beta", betaHeader)
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			if r.Method == http.MethodPost && DefaultEndpoints[r.URL.Path] {

@@ -22,6 +22,7 @@ type BetaService struct {
 	Models   BetaModelService
 	Messages BetaMessageService
 	Files    BetaFileService
+	Skills   BetaSkillService
 }
 
 // NewBetaService generates a new service that applies the given options to each
@@ -33,7 +34,8 @@ func NewBetaService(opts ...option.RequestOption) (r BetaService) {
 	r.Models = NewBetaModelService(opts...)
 	r.Messages = NewBetaMessageService(opts...)
 	r.Files = NewBetaFileService(opts...)
-	return r
+	r.Skills = NewBetaSkillService(opts...)
+	return
 }
 
 type AnthropicBeta = string
@@ -49,6 +51,7 @@ const (
 	AnthropicBetaOutput128k2025_02_19                 AnthropicBeta = "output-128k-2025-02-19"
 	AnthropicBetaFilesAPI2025_04_14                   AnthropicBeta = "files-api-2025-04-14"
 	AnthropicBetaMCPClient2025_04_04                  AnthropicBeta = "mcp-client-2025-04-04"
+	AnthropicBetaMCPClient2025_11_20                  AnthropicBeta = "mcp-client-2025-11-20"
 	AnthropicBetaDevFullThinking2025_05_14            AnthropicBeta = "dev-full-thinking-2025-05-14"
 	AnthropicBetaInterleavedThinking2025_05_14        AnthropicBeta = "interleaved-thinking-2025-05-14"
 	AnthropicBetaCodeExecution2025_05_22              AnthropicBeta = "code-execution-2025-05-22"
@@ -56,6 +59,8 @@ const (
 	AnthropicBetaContext1m2025_08_07                  AnthropicBeta = "context-1m-2025-08-07"
 	AnthropicBetaContextManagement2025_06_27          AnthropicBeta = "context-management-2025-06-27"
 	AnthropicBetaModelContextWindowExceeded2025_08_26 AnthropicBeta = "model-context-window-exceeded-2025-08-26"
+	AnthropicBetaSkills2025_10_02                     AnthropicBeta = "skills-2025-10-02"
+	AnthropicBetaFastMode2026_02_01                   AnthropicBeta = "fast-mode-2026-02-01"
 )
 
 type BetaAPIError struct {
@@ -72,7 +77,6 @@ type BetaAPIError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaAPIError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaAPIError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -91,7 +95,6 @@ type BetaAuthenticationError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaAuthenticationError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaAuthenticationError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -110,7 +113,6 @@ type BetaBillingError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaBillingError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaBillingError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -193,47 +195,47 @@ func (u BetaErrorUnion) AsAny() anyBetaError {
 
 func (u BetaErrorUnion) AsInvalidRequestError() (v BetaInvalidRequestError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsAuthenticationError() (v BetaAuthenticationError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsBillingError() (v BetaBillingError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsPermissionError() (v BetaPermissionError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsNotFoundError() (v BetaNotFoundError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsRateLimitError() (v BetaRateLimitError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsTimeoutError() (v BetaGatewayTimeoutError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsAPIError() (v BetaAPIError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 func (u BetaErrorUnion) AsOverloadedError() (v BetaOverloadedError) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return v
+	return
 }
 
 // Returns the unmodified JSON received from the API
@@ -259,7 +261,6 @@ type BetaErrorResponse struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaErrorResponse) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaErrorResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -278,7 +279,6 @@ type BetaGatewayTimeoutError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaGatewayTimeoutError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaGatewayTimeoutError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -297,7 +297,6 @@ type BetaInvalidRequestError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaInvalidRequestError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaInvalidRequestError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -316,7 +315,6 @@ type BetaNotFoundError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaNotFoundError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaNotFoundError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -335,7 +333,6 @@ type BetaOverloadedError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaOverloadedError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaOverloadedError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -354,7 +351,6 @@ type BetaPermissionError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaPermissionError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaPermissionError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
@@ -373,7 +369,6 @@ type BetaRateLimitError struct {
 
 // Returns the unmodified JSON received from the API
 func (r BetaRateLimitError) RawJSON() string { return r.JSON.raw }
-
 func (r *BetaRateLimitError) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

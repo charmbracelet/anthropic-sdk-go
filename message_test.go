@@ -32,21 +32,58 @@ func TestMessageNewWithOptionalParams(t *testing.T) {
 		MaxTokens: 1024,
 		Messages: []anthropic.MessageParam{{
 			Content: []anthropic.ContentBlockParamUnion{{
-				OfText: &anthropic.TextBlockParam{Text: "What is a quaternion?", CacheControl: anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL5m}, Citations: []anthropic.TextCitationParamUnion{{
-					OfCharLocation: &anthropic.CitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-				}}},
+				OfText: &anthropic.TextBlockParam{
+					Text: "x",
+					CacheControl: anthropic.CacheControlEphemeralParam{
+						TTL: anthropic.CacheControlEphemeralTTLTTL5m,
+					},
+					Citations: []anthropic.TextCitationParamUnion{{
+						OfCharLocation: &anthropic.CitationCharLocationParam{
+							CitedText:      "cited_text",
+							DocumentIndex:  0,
+							DocumentTitle:  anthropic.String("x"),
+							EndCharIndex:   0,
+							StartCharIndex: 0,
+						},
+					}},
+				},
 			}},
 			Role: anthropic.MessageParamRoleUser,
 		}},
-		Model: anthropic.ModelClaude3_7SonnetLatest,
+		Model: anthropic.ModelClaudeOpus4_6,
+		CacheControl: anthropic.CacheControlEphemeralParam{
+			TTL: anthropic.CacheControlEphemeralTTLTTL5m,
+		},
+		Container:    anthropic.String("container"),
+		InferenceGeo: anthropic.String("inference_geo"),
 		Metadata: anthropic.MetadataParam{
 			UserID: anthropic.String("13803d75-b4b5-4c3e-b2a2-6f21399b021b"),
 		},
+		OutputConfig: anthropic.OutputConfigParam{
+			Effort: anthropic.OutputConfigEffortLow,
+			Format: anthropic.JSONOutputFormatParam{
+				Schema: map[string]any{
+					"foo": "bar",
+				},
+			},
+		},
 		ServiceTier:   anthropic.MessageNewParamsServiceTierAuto,
 		StopSequences: []string{"string"},
-		System: []anthropic.TextBlockParam{{Text: "x", CacheControl: anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL5m}, Citations: []anthropic.TextCitationParamUnion{{
-			OfCharLocation: &anthropic.CitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-		}}}},
+		System: []anthropic.TextBlockParam{{
+			Text: "Today's date is 2024-06-01.",
+			CacheControl: anthropic.CacheControlEphemeralParam{
+				TTL: anthropic.CacheControlEphemeralTTLTTL5m,
+			},
+			Citations: []anthropic.TextCitationParamUnion{{
+				OfCharLocation: &anthropic.CitationCharLocationParam{
+					CitedText:      "cited_text",
+					DocumentIndex:  0,
+					DocumentTitle:  anthropic.String("x"),
+					EndCharIndex:   0,
+					StartCharIndex: 0,
+				},
+			}},
+		}},
 		Temperature: anthropic.Float(1),
 		Thinking: anthropic.ThinkingConfigParamUnion{
 			OfEnabled: &anthropic.ThinkingConfigEnabledParam{
@@ -61,24 +98,25 @@ func TestMessageNewWithOptionalParams(t *testing.T) {
 		Tools: []anthropic.ToolUnionParam{{
 			OfTool: &anthropic.ToolParam{
 				InputSchema: anthropic.ToolInputSchemaParam{
-					Properties: map[string]interface{}{
-						"location": map[string]interface{}{
-							"description": "The city and state, e.g. San Francisco, CA",
-							"type":        "string",
-						},
-						"unit": map[string]interface{}{
-							"description": "Unit for the output - one of (celsius, fahrenheit)",
-							"type":        "string",
-						},
+					Properties: map[string]any{
+						"location": "bar",
+						"unit":     "bar",
 					},
 					Required: []string{"location"},
 				},
-				Name: "name",
+				Name:           "name",
+				AllowedCallers: []string{"direct"},
 				CacheControl: anthropic.CacheControlEphemeralParam{
 					TTL: anthropic.CacheControlEphemeralTTLTTL5m,
 				},
-				Description: anthropic.String("Get the current weather in a given location"),
-				Type:        anthropic.ToolTypeCustom,
+				DeferLoading:        anthropic.Bool(true),
+				Description:         anthropic.String("Get the current weather in a given location"),
+				EagerInputStreaming: anthropic.Bool(true),
+				InputExamples: []map[string]any{{
+					"foo": "bar",
+				}},
+				Strict: anthropic.Bool(true),
+				Type:   anthropic.ToolTypeCustom,
 			},
 		}},
 		TopK: anthropic.Int(5),
@@ -108,13 +146,36 @@ func TestMessageCountTokensWithOptionalParams(t *testing.T) {
 	_, err := client.Messages.CountTokens(context.TODO(), anthropic.MessageCountTokensParams{
 		Messages: []anthropic.MessageParam{{
 			Content: []anthropic.ContentBlockParamUnion{{
-				OfText: &anthropic.TextBlockParam{Text: "What is a quaternion?", CacheControl: anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL5m}, Citations: []anthropic.TextCitationParamUnion{{
-					OfCharLocation: &anthropic.CitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-				}}},
+				OfText: &anthropic.TextBlockParam{
+					Text: "x",
+					CacheControl: anthropic.CacheControlEphemeralParam{
+						TTL: anthropic.CacheControlEphemeralTTLTTL5m,
+					},
+					Citations: []anthropic.TextCitationParamUnion{{
+						OfCharLocation: &anthropic.CitationCharLocationParam{
+							CitedText:      "cited_text",
+							DocumentIndex:  0,
+							DocumentTitle:  anthropic.String("x"),
+							EndCharIndex:   0,
+							StartCharIndex: 0,
+						},
+					}},
+				},
 			}},
 			Role: anthropic.MessageParamRoleUser,
 		}},
-		Model: anthropic.ModelClaude3_7SonnetLatest,
+		Model: anthropic.ModelClaudeOpus4_6,
+		CacheControl: anthropic.CacheControlEphemeralParam{
+			TTL: anthropic.CacheControlEphemeralTTLTTL5m,
+		},
+		OutputConfig: anthropic.OutputConfigParam{
+			Effort: anthropic.OutputConfigEffortLow,
+			Format: anthropic.JSONOutputFormatParam{
+				Schema: map[string]any{
+					"foo": "bar",
+				},
+			},
+		},
 		System: anthropic.MessageCountTokensParamsSystemUnion{
 			OfTextBlockArray: []anthropic.TextBlockParam{{
 				Text: "Today's date is 2024-06-01.",
@@ -145,24 +206,25 @@ func TestMessageCountTokensWithOptionalParams(t *testing.T) {
 		Tools: []anthropic.MessageCountTokensToolUnionParam{{
 			OfTool: &anthropic.ToolParam{
 				InputSchema: anthropic.ToolInputSchemaParam{
-					Properties: map[string]interface{}{
-						"location": map[string]interface{}{
-							"description": "The city and state, e.g. San Francisco, CA",
-							"type":        "string",
-						},
-						"unit": map[string]interface{}{
-							"description": "Unit for the output - one of (celsius, fahrenheit)",
-							"type":        "string",
-						},
+					Properties: map[string]any{
+						"location": "bar",
+						"unit":     "bar",
 					},
 					Required: []string{"location"},
 				},
-				Name: "name",
+				Name:           "name",
+				AllowedCallers: []string{"direct"},
 				CacheControl: anthropic.CacheControlEphemeralParam{
 					TTL: anthropic.CacheControlEphemeralTTLTTL5m,
 				},
-				Description: anthropic.String("Get the current weather in a given location"),
-				Type:        anthropic.ToolTypeCustom,
+				DeferLoading:        anthropic.Bool(true),
+				Description:         anthropic.String("Get the current weather in a given location"),
+				EagerInputStreaming: anthropic.Bool(true),
+				InputExamples: []map[string]any{{
+					"foo": "bar",
+				}},
+				Strict: anthropic.Bool(true),
+				Type:   anthropic.ToolTypeCustom,
 			},
 		}},
 	})

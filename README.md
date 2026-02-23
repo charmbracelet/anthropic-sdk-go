@@ -26,7 +26,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/anthropics/anthropic-sdk-go@v1.14.0'
+go get -u 'github.com/anthropics/anthropic-sdk-go@v1.26.0'
 ```
 
 <!-- x-release-please-end -->
@@ -230,7 +230,7 @@ func main() {
 			case anthropic.ToolUseBlock:
 				print(color("[user (" + block.Name + ")]: "))
 
-				var response interface{}
+				var response any
 				switch block.Name {
 				case "get_coordinates":
 					var input struct {
@@ -302,6 +302,71 @@ func color(s string) string {
 
 </details>
 
+<details>
+<summary>Tool helpers</summary>
+
+The SDK provides helper functions for defining tools and running automatic conversation loops. Here's a basic example:
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/anthropics/anthropic-sdk-go/toolrunner"
+)
+
+// GetWeatherInput defines the tool input with jsonschema tags for automatic schema generation
+type GetWeatherInput struct {
+	City string `json:"city" jsonschema:"required,description=The city name"`
+}
+
+func main() {
+	client := anthropic.NewClient()
+
+	// Define a tool - the schema is generated automatically from the struct's jsonschema tags
+	weatherTool, err := toolrunner.NewBetaToolFromJSONSchema(
+		"get_weather",
+		"Get weather for a city",
+		func(ctx context.Context, input GetWeatherInput) (anthropic.BetaToolResultBlockParamContentUnion, error) {
+			return anthropic.BetaToolResultBlockParamContentUnion{
+				OfText: &anthropic.BetaTextBlockParam{
+					Text: fmt.Sprintf("The weather in %s is sunny, 72°F", input.City),
+				},
+			}, nil
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	// Create a tool runner that automatically handles the conversation loop
+	runner := client.Beta.Messages.NewToolRunner([]anthropic.BetaTool{weatherTool}, anthropic.BetaToolRunnerParams{
+		BetaMessageNewParams: anthropic.BetaMessageNewParams{
+			Model:     anthropic.ModelClaudeSonnet4_20250514,
+			MaxTokens: 1024,
+			Messages: []anthropic.BetaMessageParam{
+				anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("What's the weather in Paris?")),
+			},
+		},
+		MaxIterations: 5,
+	})
+
+	// Run until Claude produces a final response
+	message, err := runner.RunToCompletion(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(message.Content[0].Text)
+}
+```
+
+For more details, see [tools.md](tools.md).
+
+</details>
+
 ### Request fields
 
 The anthropic library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
@@ -365,7 +430,7 @@ custom := param.Override[anthropic.FooParams](12)
 
 ### Request unions
 
-Unions are represented as a struct with fields prefixed by "Of" for each of it's variants,
+Unions are represented as a struct with fields prefixed by "Of" for each of its variants,
 only one field can be non-zero. The non-zero field will be serialized.
 
 Sub-properties of the union can be accessed via methods on the union struct.
@@ -571,9 +636,9 @@ _, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
 	MaxTokens: 1024,
 	Messages: []anthropic.MessageParam{{
 		Content: []anthropic.ContentBlockParamUnion{{
-			OfText: &anthropic.TextBlockParam{Text: "What is a quaternion?", CacheControl: anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL5m}, Citations: []anthropic.TextCitationParamUnion{{
-				OfCharLocation: &anthropic.CitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-			}}},
+			OfText: &anthropic.TextBlockParam{
+				Text: "x",
+			},
 		}},
 		Role: anthropic.MessageParamRoleUser,
 	}},
@@ -610,7 +675,9 @@ client.Messages.New(
 		MaxTokens: 1024,
 		Messages: []anthropic.MessageParam{{
 			Content: []anthropic.ContentBlockParamUnion{{
-				OfRequestTextBlock: &anthropic.TextBlockParam{Text: "What is a quaternion?"},
+				OfText: &anthropic.TextBlockParam{
+					Text: "What is a quaternion?",
+				},
 			}},
 			Role: anthropic.MessageParamRoleUser,
 		}},
@@ -680,7 +747,9 @@ client.Messages.New(
 		MaxTokens: 1024,
 		Messages: []anthropic.MessageParam{{
 			Content: []anthropic.ContentBlockParamUnion{{
-				OfRequestTextBlock: &anthropic.TextBlockParam{Text: "What is a quaternion?"},
+				OfText: &anthropic.TextBlockParam{
+					Text: "What is a quaternion?",
+				},
 			}},
 			Role: anthropic.MessageParamRoleUser,
 		}},
@@ -704,9 +773,9 @@ message, err := client.Messages.New(
 		MaxTokens: 1024,
 		Messages: []anthropic.MessageParam{{
 			Content: []anthropic.ContentBlockParamUnion{{
-				OfText: &anthropic.TextBlockParam{Text: "What is a quaternion?", CacheControl: anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL5m}, Citations: []anthropic.TextCitationParamUnion{{
-					OfCharLocation: &anthropic.CitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-				}}},
+				OfText: &anthropic.TextBlockParam{
+					Text: "x",
+				},
 			}},
 			Role: anthropic.MessageParamRoleUser,
 		}},
@@ -835,7 +904,56 @@ func main() {
 
 If you already have an `aws.Config`, you can also use it directly with `bedrock.WithConfig(cfg)`.
 
-Read more about Anthropic and Amazon Bedrock [here](https://docs.anthropic.com/en/api/claude-on-amazon-bedrock).
+### Bearer Token Authentication
+
+You can also authenticate with Bedrock using bearer tokens instead of AWS credentials. This is useful in corporate environments where teams need access to Bedrock without managing AWS credentials, IAM roles, or account-level permissions.
+
+The simplest approach is to set the `AWS_BEARER_TOKEN_BEDROCK` environment variable:
+
+```go
+package main
+
+import (
+	"context"
+
+	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/anthropics/anthropic-sdk-go/bedrock"
+)
+
+func main() {
+	// Automatically uses AWS_BEARER_TOKEN_BEDROCK from the environment.
+	// Region defaults to us-east-1 or uses AWS_REGION if set.
+	client := anthropic.NewClient(
+		bedrock.WithLoadDefaultConfig(context.Background()),
+	)
+}
+```
+
+To provide a token programmatically, use `bedrock.WithConfig` with a `BearerAuthTokenProvider`:
+
+```go
+package main
+
+import (
+	"context"
+
+	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/anthropics/anthropic-sdk-go/bedrock"
+	"github.com/aws/aws-sdk-go-v2/aws"
+)
+
+func main() {
+	cfg := aws.Config{
+		Region:                  "us-west-2",
+		BearerAuthTokenProvider: bedrock.NewStaticBearerTokenProvider("your-bearer-token"),
+	}
+	client := anthropic.NewClient(
+		bedrock.WithConfig(cfg),
+	)
+}
+```
+
+Read more about Anthropic and Amazon Bedrock [here](https://docs.anthropic.com/en/api/claude-on-amazon-bedrock) and about Bedrock API keys [here](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html).
 
 ## Google Vertex AI
 

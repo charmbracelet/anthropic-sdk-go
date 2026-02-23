@@ -50,7 +50,7 @@ func NewMessageBatchService(opts ...option.RequestOption) (r MessageBatchService
 // can take up to 24 hours to complete.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) New(ctx context.Context, body MessageBatchNewParams, opts ...option.RequestOption) (res *MessageBatch, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/messages/batches"
@@ -63,7 +63,7 @@ func (r *MessageBatchService) New(ctx context.Context, body MessageBatchNewParam
 // `results_url` field in the response.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) Get(ctx context.Context, messageBatchID string, opts ...option.RequestOption) (res *MessageBatch, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if messageBatchID == "" {
@@ -79,7 +79,7 @@ func (r *MessageBatchService) Get(ctx context.Context, messageBatchID string, op
 // returned first.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) List(ctx context.Context, query MessageBatchListParams, opts ...option.RequestOption) (res *pagination.Page[MessageBatch], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -101,7 +101,7 @@ func (r *MessageBatchService) List(ctx context.Context, query MessageBatchListPa
 // returned first.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) ListAutoPaging(ctx context.Context, query MessageBatchListParams, opts ...option.RequestOption) *pagination.PageAutoPager[MessageBatch] {
 	return pagination.NewPageAutoPager(r.List(ctx, query, opts...))
 }
@@ -112,7 +112,7 @@ func (r *MessageBatchService) ListAutoPaging(ctx context.Context, query MessageB
 // like to delete an in-progress batch, you must first cancel it.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) Delete(ctx context.Context, messageBatchID string, opts ...option.RequestOption) (res *DeletedMessageBatch, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if messageBatchID == "" {
@@ -135,7 +135,7 @@ func (r *MessageBatchService) Delete(ctx context.Context, messageBatchID string,
 // non-interruptible.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) Cancel(ctx context.Context, messageBatchID string, opts ...option.RequestOption) (res *MessageBatch, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if messageBatchID == "" {
@@ -154,7 +154,7 @@ func (r *MessageBatchService) Cancel(ctx context.Context, messageBatchID string,
 // requests. Use the `custom_id` field to match results to requests.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *MessageBatchService) ResultsStreaming(ctx context.Context, messageBatchID string, opts ...option.RequestOption) (stream *jsonl.Stream[MessageBatchIndividualResponse]) {
 	var (
 		raw *http.Response
@@ -520,8 +520,8 @@ type MessageBatchNewParamsRequest struct {
 	CustomID string `json:"custom_id,required"`
 	// Messages API creation parameters for the individual request.
 	//
-	// See the [Messages API reference](/en/api/messages) for full documentation on
-	// available parameters.
+	// See the [Messages API reference](https://docs.claude.com/en/api/messages) for
+	// full documentation on available parameters.
 	Params MessageBatchNewParamsRequestParams `json:"params,omitzero,required"`
 	paramObj
 }
@@ -537,8 +537,8 @@ func (r *MessageBatchNewParamsRequest) UnmarshalJSON(data []byte) error {
 
 // Messages API creation parameters for the individual request.
 //
-// See the [Messages API reference](/en/api/messages) for full documentation on
-// available parameters.
+// See the [Messages API reference](https://docs.claude.com/en/api/messages) for
+// full documentation on available parameters.
 //
 // The properties MaxTokens, Messages, Model are required.
 type MessageBatchNewParamsRequestParams struct {
@@ -548,7 +548,7 @@ type MessageBatchNewParamsRequestParams struct {
 	// only specifies the absolute maximum number of tokens to generate.
 	//
 	// Different models have different maximum values for this parameter. See
-	// [models](https://docs.anthropic.com/en/docs/models-overview) for details.
+	// [models](https://docs.claude.com/en/docs/models-overview) for details.
 	MaxTokens int64 `json:"max_tokens,required"`
 	// Input messages.
 	//
@@ -611,12 +611,12 @@ type MessageBatchNewParamsRequestParams struct {
 	// { "role": "user", "content": [{ "type": "text", "text": "Hello, Claude" }] }
 	// ```
 	//
-	// See [input examples](https://docs.anthropic.com/en/api/messages-examples).
+	// See [input examples](https://docs.claude.com/en/api/messages-examples).
 	//
 	// Note that if you want to include a
-	// [system prompt](https://docs.anthropic.com/en/docs/system-prompts), you can use
-	// the top-level `system` parameter — there is no `"system"` role for input
-	// messages in the Messages API.
+	// [system prompt](https://docs.claude.com/en/docs/system-prompts), you can use the
+	// top-level `system` parameter — there is no `"system"` role for input messages in
+	// the Messages API.
 	//
 	// There is a limit of 100,000 messages in a single request.
 	Messages []MessageParam `json:"messages,omitzero,required"`
@@ -624,10 +624,14 @@ type MessageBatchNewParamsRequestParams struct {
 	// [models](https://docs.anthropic.com/en/docs/models-overview) for additional
 	// details and options.
 	Model Model `json:"model,omitzero,required"`
+	// Container identifier for reuse across requests.
+	Container param.Opt[string] `json:"container,omitzero"`
+	// Specifies the geographic region for inference processing. If not specified, the
+	// workspace's `default_inference_geo` is used.
+	InferenceGeo param.Opt[string] `json:"inference_geo,omitzero"`
 	// Whether to incrementally stream the response using server-sent events.
 	//
-	// See [streaming](https://docs.anthropic.com/en/api/messages-streaming) for
-	// details.
+	// See [streaming](https://docs.claude.com/en/api/messages-streaming) for details.
 	Stream param.Opt[bool] `json:"stream,omitzero"`
 	// Amount of randomness injected into the response.
 	//
@@ -656,13 +660,18 @@ type MessageBatchNewParamsRequestParams struct {
 	// Recommended for advanced use cases only. You usually only need to use
 	// `temperature`.
 	TopP param.Opt[float64] `json:"top_p,omitzero"`
+	// Top-level cache control automatically applies a cache_control marker to the last
+	// cacheable block in the request.
+	CacheControl CacheControlEphemeralParam `json:"cache_control,omitzero"`
 	// An object describing metadata about the request.
 	Metadata MetadataParam `json:"metadata,omitzero"`
+	// Configuration options for the model's output, such as the output format.
+	OutputConfig OutputConfigParam `json:"output_config,omitzero"`
 	// Determines whether to use priority capacity (if available) or standard capacity
 	// for this request.
 	//
 	// Anthropic offers different levels of service for your API requests. See
-	// [service-tiers](https://docs.anthropic.com/en/api/service-tiers) for details.
+	// [service-tiers](https://docs.claude.com/en/api/service-tiers) for details.
 	//
 	// Any of "auto", "standard_only".
 	ServiceTier string `json:"service_tier,omitzero"`
@@ -680,7 +689,7 @@ type MessageBatchNewParamsRequestParams struct {
 	//
 	// A system prompt is a way of providing context and instructions to Claude, such
 	// as specifying a particular goal or role. See our
-	// [guide to system prompts](https://docs.anthropic.com/en/docs/system-prompts).
+	// [guide to system prompts](https://docs.claude.com/en/docs/system-prompts).
 	System []TextBlockParam `json:"system,omitzero"`
 	// Configuration for enabling Claude's extended thinking.
 	//
@@ -689,7 +698,7 @@ type MessageBatchNewParamsRequestParams struct {
 	// tokens and counts towards your `max_tokens` limit.
 	//
 	// See
-	// [extended thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)
+	// [extended thinking](https://docs.claude.com/en/docs/build-with-claude/extended-thinking)
 	// for details.
 	Thinking ThinkingConfigParamUnion `json:"thinking,omitzero"`
 	// How the model should use the provided tools. The model can use a specific tool,
@@ -704,9 +713,9 @@ type MessageBatchNewParamsRequestParams struct {
 	//
 	// There are two types of tools: **client tools** and **server tools**. The
 	// behavior described below applies to client tools. For
-	// [server tools](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview#server-tools),
+	// [server tools](https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview#server-tools),
 	// see their individual documentation as each has its own behavior (e.g., the
-	// [web search tool](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search-tool)).
+	// [web search tool](https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool)).
 	//
 	// Each tool definition includes:
 	//
@@ -775,7 +784,7 @@ type MessageBatchNewParamsRequestParams struct {
 	// functions, or more generally whenever you want the model to produce a particular
 	// JSON structure of output.
 	//
-	// See our [guide](https://docs.anthropic.com/en/docs/tool-use) for more details.
+	// See our [guide](https://docs.claude.com/en/docs/tool-use) for more details.
 	Tools []ToolUnionParam `json:"tools,omitzero"`
 	paramObj
 }

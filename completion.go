@@ -39,16 +39,16 @@ func NewCompletionService(opts ...option.RequestOption) (r CompletionService) {
 // [Legacy] Create a Text Completion.
 //
 // The Text Completions API is a legacy API. We recommend using the
-// [Messages API](https://docs.anthropic.com/en/api/messages) going forward.
+// [Messages API](https://docs.claude.com/en/api/messages) going forward.
 //
 // Future models and features will not be compatible with Text Completions. See our
-// [migration guide](https://docs.anthropic.com/en/api/migrating-from-text-completions-to-messages)
+// [migration guide](https://docs.claude.com/en/api/migrating-from-text-completions-to-messages)
 // for guidance in migrating from Text Completions to Messages.
 //
 // Note: If you choose to set a timeout for this request, we recommend 10 minutes.
 func (r *CompletionService) New(ctx context.Context, params CompletionNewParams, opts ...option.RequestOption) (res *Completion, err error) {
 	for _, v := range params.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/complete"
@@ -59,10 +59,10 @@ func (r *CompletionService) New(ctx context.Context, params CompletionNewParams,
 // [Legacy] Create a Text Completion.
 //
 // The Text Completions API is a legacy API. We recommend using the
-// [Messages API](https://docs.anthropic.com/en/api/messages) going forward.
+// [Messages API](https://docs.claude.com/en/api/messages) going forward.
 //
 // Future models and features will not be compatible with Text Completions. See our
-// [migration guide](https://docs.anthropic.com/en/api/migrating-from-text-completions-to-messages)
+// [migration guide](https://docs.claude.com/en/api/migrating-from-text-completions-to-messages)
 // for guidance in migrating from Text Completions to Messages.
 //
 // Note: If you choose to set a timeout for this request, we recommend 10 minutes.
@@ -72,10 +72,10 @@ func (r *CompletionService) NewStreaming(ctx context.Context, params CompletionN
 		err error
 	)
 	for _, v := range params.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithJSONSet("stream", true)}, opts...)
+	opts = append(opts, option.WithJSONSet("stream", true))
 	path := "v1/complete"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &raw, opts...)
 	return ssestream.NewStream[Completion](ssestream.NewDecoder(raw), err)
@@ -142,10 +142,9 @@ type CompletionNewParams struct {
 	// "\n\nHuman: {userQuestion}\n\nAssistant:"
 	// ```
 	//
-	// See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
-	// our guide to
-	// [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
-	// details.
+	// See [prompt validation](https://docs.claude.com/en/api/prompt-validation) and
+	// our guide to [prompt design](https://docs.claude.com/en/docs/intro-to-prompting)
+	// for more details.
 	Prompt string `json:"prompt,required"`
 	// Amount of randomness injected into the response.
 	//

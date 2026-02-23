@@ -49,10 +49,10 @@ func NewBetaMessageBatchService(opts ...option.RequestOption) (r BetaMessageBatc
 // can take up to 24 hours to complete.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) New(ctx context.Context, params BetaMessageBatchNewParams, opts ...option.RequestOption) (res *BetaMessageBatch, err error) {
 	for _, v := range params.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "message-batches-2024-09-24")}, opts...)
@@ -66,10 +66,10 @@ func (r *BetaMessageBatchService) New(ctx context.Context, params BetaMessageBat
 // `results_url` field in the response.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) Get(ctx context.Context, messageBatchID string, query BetaMessageBatchGetParams, opts ...option.RequestOption) (res *BetaMessageBatch, err error) {
 	for _, v := range query.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "message-batches-2024-09-24")}, opts...)
@@ -86,11 +86,11 @@ func (r *BetaMessageBatchService) Get(ctx context.Context, messageBatchID string
 // returned first.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) List(ctx context.Context, params BetaMessageBatchListParams, opts ...option.RequestOption) (res *pagination.Page[BetaMessageBatch], err error) {
 	var raw *http.Response
 	for _, v := range params.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "message-batches-2024-09-24"), option.WithResponseInto(&raw)}, opts...)
@@ -111,7 +111,7 @@ func (r *BetaMessageBatchService) List(ctx context.Context, params BetaMessageBa
 // returned first.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) ListAutoPaging(ctx context.Context, params BetaMessageBatchListParams, opts ...option.RequestOption) *pagination.PageAutoPager[BetaMessageBatch] {
 	return pagination.NewPageAutoPager(r.List(ctx, params, opts...))
 }
@@ -122,10 +122,10 @@ func (r *BetaMessageBatchService) ListAutoPaging(ctx context.Context, params Bet
 // like to delete an in-progress batch, you must first cancel it.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) Delete(ctx context.Context, messageBatchID string, body BetaMessageBatchDeleteParams, opts ...option.RequestOption) (res *BetaDeletedMessageBatch, err error) {
 	for _, v := range body.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "message-batches-2024-09-24")}, opts...)
@@ -149,10 +149,10 @@ func (r *BetaMessageBatchService) Delete(ctx context.Context, messageBatchID str
 // non-interruptible.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) Cancel(ctx context.Context, messageBatchID string, body BetaMessageBatchCancelParams, opts ...option.RequestOption) (res *BetaMessageBatch, err error) {
 	for _, v := range body.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "message-batches-2024-09-24")}, opts...)
@@ -172,14 +172,14 @@ func (r *BetaMessageBatchService) Cancel(ctx context.Context, messageBatchID str
 // requests. Use the `custom_id` field to match results to requests.
 //
 // Learn more about the Message Batches API in our
-// [user guide](/en/docs/build-with-claude/batch-processing)
+// [user guide](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 func (r *BetaMessageBatchService) ResultsStreaming(ctx context.Context, messageBatchID string, query BetaMessageBatchResultsParams, opts ...option.RequestOption) (stream *jsonl.Stream[BetaMessageBatchIndividualResponse]) {
 	var (
 		raw *http.Response
 		err error
 	)
 	for _, v := range query.Betas {
-		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%s", v)))
+		opts = append(opts, option.WithHeaderAdd("anthropic-beta", fmt.Sprintf("%v", v)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("anthropic-beta", "message-batches-2024-09-24"), option.WithHeader("Accept", "application/x-jsonl")}, opts...)
@@ -543,8 +543,8 @@ type BetaMessageBatchNewParamsRequest struct {
 	CustomID string `json:"custom_id,required"`
 	// Messages API creation parameters for the individual request.
 	//
-	// See the [Messages API reference](/en/api/messages) for full documentation on
-	// available parameters.
+	// See the [Messages API reference](https://docs.claude.com/en/api/messages) for
+	// full documentation on available parameters.
 	Params BetaMessageBatchNewParamsRequestParams `json:"params,omitzero,required"`
 	paramObj
 }
@@ -560,8 +560,8 @@ func (r *BetaMessageBatchNewParamsRequest) UnmarshalJSON(data []byte) error {
 
 // Messages API creation parameters for the individual request.
 //
-// See the [Messages API reference](/en/api/messages) for full documentation on
-// available parameters.
+// See the [Messages API reference](https://docs.claude.com/en/api/messages) for
+// full documentation on available parameters.
 //
 // The properties MaxTokens, Messages, Model are required.
 type BetaMessageBatchNewParamsRequestParams struct {
@@ -571,7 +571,7 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	// only specifies the absolute maximum number of tokens to generate.
 	//
 	// Different models have different maximum values for this parameter. See
-	// [models](https://docs.anthropic.com/en/docs/models-overview) for details.
+	// [models](https://docs.claude.com/en/docs/models-overview) for details.
 	MaxTokens int64 `json:"max_tokens,required"`
 	// Input messages.
 	//
@@ -634,12 +634,12 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	// { "role": "user", "content": [{ "type": "text", "text": "Hello, Claude" }] }
 	// ```
 	//
-	// See [input examples](https://docs.anthropic.com/en/api/messages-examples).
+	// See [input examples](https://docs.claude.com/en/api/messages-examples).
 	//
 	// Note that if you want to include a
-	// [system prompt](https://docs.anthropic.com/en/docs/system-prompts), you can use
-	// the top-level `system` parameter — there is no `"system"` role for input
-	// messages in the Messages API.
+	// [system prompt](https://docs.claude.com/en/docs/system-prompts), you can use the
+	// top-level `system` parameter — there is no `"system"` role for input messages in
+	// the Messages API.
 	//
 	// There is a limit of 100,000 messages in a single request.
 	Messages []BetaMessageParam `json:"messages,omitzero,required"`
@@ -647,12 +647,12 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	// [models](https://docs.anthropic.com/en/docs/models-overview) for additional
 	// details and options.
 	Model Model `json:"model,omitzero,required"`
-	// Container identifier for reuse across requests.
-	Container param.Opt[string] `json:"container,omitzero"`
+	// Specifies the geographic region for inference processing. If not specified, the
+	// workspace's `default_inference_geo` is used.
+	InferenceGeo param.Opt[string] `json:"inference_geo,omitzero"`
 	// Whether to incrementally stream the response using server-sent events.
 	//
-	// See [streaming](https://docs.anthropic.com/en/api/messages-streaming) for
-	// details.
+	// See [streaming](https://docs.claude.com/en/api/messages-streaming) for details.
 	Stream param.Opt[bool] `json:"stream,omitzero"`
 	// Amount of randomness injected into the response.
 	//
@@ -681,17 +681,40 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	// Recommended for advanced use cases only. You usually only need to use
 	// `temperature`.
 	TopP param.Opt[float64] `json:"top_p,omitzero"`
-	// Configuration for context management operations.
+	// Container identifier for reuse across requests.
+	Container BetaMessageBatchNewParamsRequestParamsContainerUnion `json:"container,omitzero"`
+	// The inference speed mode for this request. `"fast"` enables high
+	// output-tokens-per-second inference.
+	//
+	// Any of "standard", "fast".
+	Speed string `json:"speed,omitzero"`
+	// Top-level cache control automatically applies a cache_control marker to the last
+	// cacheable block in the request.
+	CacheControl BetaCacheControlEphemeralParam `json:"cache_control,omitzero"`
+	// Context management configuration.
+	//
+	// This allows you to control how Claude manages context across multiple requests,
+	// such as whether to clear function results or not.
 	ContextManagement BetaContextManagementConfigParam `json:"context_management,omitzero"`
 	// MCP servers to be utilized in this request
 	MCPServers []BetaRequestMCPServerURLDefinitionParam `json:"mcp_servers,omitzero"`
 	// An object describing metadata about the request.
 	Metadata BetaMetadataParam `json:"metadata,omitzero"`
+	// Configuration options for the model's output, such as the output format.
+	OutputConfig BetaOutputConfigParam `json:"output_config,omitzero"`
+	// Deprecated: Use `output_config.format` instead. See
+	// [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)
+	//
+	// A schema to specify Claude's output format in responses. This parameter will be
+	// removed in a future release.
+	//
+	// Deprecated: deprecated
+	OutputFormat BetaJSONOutputFormatParam `json:"output_format,omitzero"`
 	// Determines whether to use priority capacity (if available) or standard capacity
 	// for this request.
 	//
 	// Anthropic offers different levels of service for your API requests. See
-	// [service-tiers](https://docs.anthropic.com/en/api/service-tiers) for details.
+	// [service-tiers](https://docs.claude.com/en/api/service-tiers) for details.
 	//
 	// Any of "auto", "standard_only".
 	ServiceTier string `json:"service_tier,omitzero"`
@@ -709,7 +732,7 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	//
 	// A system prompt is a way of providing context and instructions to Claude, such
 	// as specifying a particular goal or role. See our
-	// [guide to system prompts](https://docs.anthropic.com/en/docs/system-prompts).
+	// [guide to system prompts](https://docs.claude.com/en/docs/system-prompts).
 	System []BetaTextBlockParam `json:"system,omitzero"`
 	// Configuration for enabling Claude's extended thinking.
 	//
@@ -718,7 +741,7 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	// tokens and counts towards your `max_tokens` limit.
 	//
 	// See
-	// [extended thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)
+	// [extended thinking](https://docs.claude.com/en/docs/build-with-claude/extended-thinking)
 	// for details.
 	Thinking BetaThinkingConfigParamUnion `json:"thinking,omitzero"`
 	// How the model should use the provided tools. The model can use a specific tool,
@@ -733,9 +756,9 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	//
 	// There are two types of tools: **client tools** and **server tools**. The
 	// behavior described below applies to client tools. For
-	// [server tools](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview#server-tools),
+	// [server tools](https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview#server-tools),
 	// see their individual documentation as each has its own behavior (e.g., the
-	// [web search tool](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search-tool)).
+	// [web search tool](https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool)).
 	//
 	// Each tool definition includes:
 	//
@@ -804,7 +827,7 @@ type BetaMessageBatchNewParamsRequestParams struct {
 	// functions, or more generally whenever you want the model to produce a particular
 	// JSON structure of output.
 	//
-	// See our [guide](https://docs.anthropic.com/en/docs/tool-use) for more details.
+	// See our [guide](https://docs.claude.com/en/docs/tool-use) for more details.
 	Tools []BetaToolUnionParam `json:"tools,omitzero"`
 	paramObj
 }
@@ -822,6 +845,34 @@ func init() {
 	apijson.RegisterFieldValidator[BetaMessageBatchNewParamsRequestParams](
 		"service_tier", "auto", "standard_only",
 	)
+	apijson.RegisterFieldValidator[BetaMessageBatchNewParamsRequestParams](
+		"speed", "standard", "fast",
+	)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type BetaMessageBatchNewParamsRequestParamsContainerUnion struct {
+	OfContainers *BetaContainerParams `json:",omitzero,inline"`
+	OfString     param.Opt[string]    `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u BetaMessageBatchNewParamsRequestParamsContainerUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfContainers, u.OfString)
+}
+func (u *BetaMessageBatchNewParamsRequestParamsContainerUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+func (u *BetaMessageBatchNewParamsRequestParamsContainerUnion) asAny() any {
+	if !param.IsOmitted(u.OfContainers) {
+		return u.OfContainers
+	} else if !param.IsOmitted(u.OfString) {
+		return &u.OfString.Value
+	}
+	return nil
 }
 
 type BetaMessageBatchGetParams struct {

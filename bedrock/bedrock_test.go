@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"testing"
 
@@ -74,7 +75,7 @@ func TestBedrockURLEncoding(t *testing.T) {
 			middleware := bedrockMiddleware(signer, cfg)
 
 			// Create request body
-			requestBody := map[string]interface{}{
+			requestBody := map[string]any{
 				"model":  tc.model,
 				"stream": tc.stream,
 				"messages": []map[string]string{
@@ -123,5 +124,131 @@ func TestBedrockURLEncoding(t *testing.T) {
 				t.Fatalf("Middleware failed: %v", err)
 			}
 		})
+	}
+}
+
+func TestBedrockBetaHeadersReRoutedThroughBody(t *testing.T) {
+	// Create a mock AWS config
+	cfg := aws.Config{
+		Region: "us-east-1",
+		Credentials: credentials.StaticCredentialsProvider{
+			Value: aws.Credentials{
+				AccessKeyID:     "test-access-key",
+				SecretAccessKey: "test-secret-key",
+			},
+		},
+	}
+
+	signer := v4.NewSigner()
+	middleware := bedrockMiddleware(signer, cfg)
+
+	// Create HTTP request with beta headers
+	type fakeRequest struct {
+		Model         string              `json:"model"`
+		AnthropicBeta []string            `json:"anthropic_beta,omitempty"`
+		Messages      []map[string]string `json:"messages"`
+	}
+	reqBody := fakeRequest{
+		Model: "fake-model",
+		Messages: []map[string]string{
+			{"role": "user", "content": "Hello"},
+		},
+	}
+	requestBodyBytes, err := json.Marshal(reqBody)
+	if err != nil {
+		t.Fatalf("Failed to marshal request body: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", "https://bedrock-runtime.us-east-1.amazonaws.com/v1/messages", bytes.NewReader(requestBodyBytes))
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Add("anthropic-beta", "beta-feature-1")
+	req.Header.Add("anthropic-beta", "beta-feature-2")
+
+	// Apply middleware
+	_, err = middleware(req, func(r *http.Request) (*http.Response, error) {
+		// Read the modified body
+		bodyBytes, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Fatalf("Failed to read request body: %v", err)
+		}
+		var modifiedBody fakeRequest
+		err = json.Unmarshal(bodyBytes, &modifiedBody)
+		if err != nil {
+			t.Fatalf("Failed to unmarshal modified body: %v", err)
+		}
+
+		// Verify that the anthropic_beta field is present in the body
+		expectedBetas := []string{"beta-feature-1", "beta-feature-2"}
+		if len(modifiedBody.AnthropicBeta) != len(expectedBetas) {
+			t.Fatalf("Expected %d beta features, got %d", len(expectedBetas), len(modifiedBody.AnthropicBeta))
+		}
+		for i, beta := range expectedBetas {
+			if modifiedBody.AnthropicBeta[i] != beta {
+				t.Errorf("Expected beta feature %q, got %q", beta, modifiedBody.AnthropicBeta[i])
+			}
+		}
+
+		// Return a dummy response
+		return &http.Response{
+			StatusCode: 200,
+			Body:       http.NoBody,
+		}, nil
+	})
+
+	if err != nil {
+		t.Fatalf("Middleware failed: %v", err)
+	}
+}
+
+func TestBedrockBearerToken(t *testing.T) {
+	token := "test-bearer-token"
+	region := "us-west-2"
+
+	cfg := aws.Config{
+		Region:                  region,
+		BearerAuthTokenProvider: NewStaticBearerTokenProvider(token),
+	}
+	middleware := bedrockMiddleware(nil, cfg)
+
+	requestBody := map[string]any{
+		"model": "claude-3-sonnet",
+		"messages": []map[string]string{
+			{"role": "user", "content": "Hello"},
+		},
+	}
+
+	bodyBytes, err := json.Marshal(requestBody)
+	if err != nil {
+		t.Fatalf("Failed to marshal request body: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", "https://bedrock-runtime.us-west-2.amazonaws.com/v1/messages", bytes.NewReader(bodyBytes))
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	_, err = middleware(req, func(r *http.Request) (*http.Response, error) {
+		authHeader := r.Header.Get("Authorization")
+		expectedAuth := "Bearer " + token
+		if authHeader != expectedAuth {
+			t.Errorf("Expected Authorization header %q, got %q", expectedAuth, authHeader)
+		}
+
+		if r.Header.Get("X-Amz-Date") != "" {
+			t.Error("Expected no AWS SigV4 headers when using bearer token")
+		}
+
+		return &http.Response{
+			StatusCode: 200,
+			Body:       http.NoBody,
+		}, nil
+	})
+
+	if err != nil {
+		t.Fatalf("Middleware failed: %v", err)
 	}
 }

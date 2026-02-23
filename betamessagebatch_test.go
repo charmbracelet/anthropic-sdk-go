@@ -33,33 +33,60 @@ func TestBetaMessageBatchNewWithOptionalParams(t *testing.T) {
 				MaxTokens: 1024,
 				Messages: []anthropic.BetaMessageParam{{
 					Content: []anthropic.BetaContentBlockParamUnion{{
-						OfText: &anthropic.BetaTextBlockParam{Text: "What is a quaternion?", CacheControl: anthropic.BetaCacheControlEphemeralParam{TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m}, Citations: []anthropic.BetaTextCitationParamUnion{{
-							OfCharLocation: &anthropic.BetaCitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-						}}},
+						OfText: &anthropic.BetaTextBlockParam{
+							Text: "x",
+							CacheControl: anthropic.BetaCacheControlEphemeralParam{
+								TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m,
+							},
+							Citations: []anthropic.BetaTextCitationParamUnion{{
+								OfCharLocation: &anthropic.BetaCitationCharLocationParam{
+									CitedText:      "cited_text",
+									DocumentIndex:  0,
+									DocumentTitle:  anthropic.String("x"),
+									EndCharIndex:   0,
+									StartCharIndex: 0,
+								},
+							}},
+						},
 					}},
 					Role: anthropic.BetaMessageParamRoleUser,
 				}},
-				Model:     anthropic.ModelClaude3_7SonnetLatest,
-				Container: anthropic.String("container"),
+				Model: anthropic.ModelClaudeOpus4_6,
+				CacheControl: anthropic.BetaCacheControlEphemeralParam{
+					TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m,
+				},
+				Container: anthropic.BetaMessageBatchNewParamsRequestParamsContainerUnion{
+					OfContainers: &anthropic.BetaContainerParams{
+						ID: anthropic.String("id"),
+						Skills: []anthropic.BetaSkillParams{{
+							SkillID: "x",
+							Type:    anthropic.BetaSkillParamsTypeAnthropic,
+							Version: anthropic.String("x"),
+						}},
+					},
+				},
 				ContextManagement: anthropic.BetaContextManagementConfigParam{
-					Edits: []anthropic.BetaClearToolUses20250919EditParam{{
-						ClearAtLeast: anthropic.BetaInputTokensClearAtLeastParam{
-							Value: 0,
-						},
-						ClearToolInputs: anthropic.BetaClearToolUses20250919EditClearToolInputsUnionParam{
-							OfBool: anthropic.Bool(true),
-						},
-						ExcludeTools: []string{"string"},
-						Keep: anthropic.BetaToolUsesKeepParam{
-							Value: 0,
-						},
-						Trigger: anthropic.BetaClearToolUses20250919EditTriggerUnionParam{
-							OfInputTokens: &anthropic.BetaInputTokensTriggerParam{
-								Value: 1,
+					Edits: []anthropic.BetaContextManagementConfigEditUnionParam{{
+						OfClearToolUses20250919: &anthropic.BetaClearToolUses20250919EditParam{
+							ClearAtLeast: anthropic.BetaInputTokensClearAtLeastParam{
+								Value: 0,
+							},
+							ClearToolInputs: anthropic.BetaClearToolUses20250919EditClearToolInputsUnionParam{
+								OfBool: anthropic.Bool(true),
+							},
+							ExcludeTools: []string{"string"},
+							Keep: anthropic.BetaToolUsesKeepParam{
+								Value: 0,
+							},
+							Trigger: anthropic.BetaClearToolUses20250919EditTriggerUnionParam{
+								OfInputTokens: &anthropic.BetaInputTokensTriggerParam{
+									Value: 1,
+								},
 							},
 						},
 					}},
 				},
+				InferenceGeo: anthropic.String("inference_geo"),
 				MCPServers: []anthropic.BetaRequestMCPServerURLDefinitionParam{{
 					Name:               "name",
 					URL:                "url",
@@ -72,12 +99,38 @@ func TestBetaMessageBatchNewWithOptionalParams(t *testing.T) {
 				Metadata: anthropic.BetaMetadataParam{
 					UserID: anthropic.String("13803d75-b4b5-4c3e-b2a2-6f21399b021b"),
 				},
+				OutputConfig: anthropic.BetaOutputConfigParam{
+					Effort: anthropic.BetaOutputConfigEffortLow,
+					Format: anthropic.BetaJSONOutputFormatParam{
+						Schema: map[string]any{
+							"foo": "bar",
+						},
+					},
+				},
+				OutputFormat: anthropic.BetaJSONOutputFormatParam{
+					Schema: map[string]any{
+						"foo": "bar",
+					},
+				},
 				ServiceTier:   "auto",
+				Speed:         "standard",
 				StopSequences: []string{"string"},
 				Stream:        anthropic.Bool(true),
-				System: []anthropic.BetaTextBlockParam{{Text: "x", CacheControl: anthropic.BetaCacheControlEphemeralParam{TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m}, Citations: []anthropic.BetaTextCitationParamUnion{{
-					OfCharLocation: &anthropic.BetaCitationCharLocationParam{CitedText: "cited_text", DocumentIndex: 0, DocumentTitle: anthropic.String("x"), EndCharIndex: 0, StartCharIndex: 0},
-				}}}},
+				System: []anthropic.BetaTextBlockParam{{
+					Text: "Today's date is 2024-06-01.",
+					CacheControl: anthropic.BetaCacheControlEphemeralParam{
+						TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m,
+					},
+					Citations: []anthropic.BetaTextCitationParamUnion{{
+						OfCharLocation: &anthropic.BetaCitationCharLocationParam{
+							CitedText:      "cited_text",
+							DocumentIndex:  0,
+							DocumentTitle:  anthropic.String("x"),
+							EndCharIndex:   0,
+							StartCharIndex: 0,
+						},
+					}},
+				}},
 				Temperature: anthropic.Float(1),
 				Thinking: anthropic.BetaThinkingConfigParamUnion{
 					OfEnabled: &anthropic.BetaThinkingConfigEnabledParam{
@@ -92,24 +145,25 @@ func TestBetaMessageBatchNewWithOptionalParams(t *testing.T) {
 				Tools: []anthropic.BetaToolUnionParam{{
 					OfTool: &anthropic.BetaToolParam{
 						InputSchema: anthropic.BetaToolInputSchemaParam{
-							Properties: map[string]interface{}{
-								"location": map[string]interface{}{
-									"description": "The city and state, e.g. San Francisco, CA",
-									"type":        "string",
-								},
-								"unit": map[string]interface{}{
-									"description": "Unit for the output - one of (celsius, fahrenheit)",
-									"type":        "string",
-								},
+							Properties: map[string]any{
+								"location": "bar",
+								"unit":     "bar",
 							},
 							Required: []string{"location"},
 						},
-						Name: "name",
+						Name:           "name",
+						AllowedCallers: []string{"direct"},
 						CacheControl: anthropic.BetaCacheControlEphemeralParam{
 							TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m,
 						},
-						Description: anthropic.String("Get the current weather in a given location"),
-						Type:        anthropic.BetaToolTypeCustom,
+						DeferLoading:        anthropic.Bool(true),
+						Description:         anthropic.String("Get the current weather in a given location"),
+						EagerInputStreaming: anthropic.Bool(true),
+						InputExamples: []map[string]any{{
+							"foo": "bar",
+						}},
+						Strict: anthropic.Bool(true),
+						Type:   anthropic.BetaToolTypeCustom,
 					},
 				}},
 				TopK: anthropic.Int(5),

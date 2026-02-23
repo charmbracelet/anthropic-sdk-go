@@ -31,121 +31,142 @@ func ValueOf[T Constant[T]]() T {
 	return t.Default()
 }
 
-type (
-	Any                                     string // Always "any"
-	APIError                                string // Always "api_error"
-	ApplicationPDF                          string // Always "application/pdf"
-	Approximate                             string // Always "approximate"
-	Assistant                               string // Always "assistant"
-	AuthenticationError                     string // Always "authentication_error"
-	Auto                                    string // Always "auto"
-	Base64                                  string // Always "base64"
-	Bash                                    string // Always "bash"
-	Bash20241022                            string // Always "bash_20241022"
-	Bash20250124                            string // Always "bash_20250124"
-	BashCodeExecutionOutput                 string // Always "bash_code_execution_output"
-	BashCodeExecutionResult                 string // Always "bash_code_execution_result"
-	BashCodeExecutionToolResult             string // Always "bash_code_execution_tool_result"
-	BashCodeExecutionToolResultError        string // Always "bash_code_execution_tool_result_error"
-	BillingError                            string // Always "billing_error"
-	Canceled                                string // Always "canceled"
-	CharLocation                            string // Always "char_location"
-	CitationsDelta                          string // Always "citations_delta"
-	ClearToolUses20250919                   string // Always "clear_tool_uses_20250919"
-	CodeExecution                           string // Always "code_execution"
-	CodeExecution20250522                   string // Always "code_execution_20250522"
-	CodeExecution20250825                   string // Always "code_execution_20250825"
-	CodeExecutionOutput                     string // Always "code_execution_output"
-	CodeExecutionResult                     string // Always "code_execution_result"
-	CodeExecutionToolResult                 string // Always "code_execution_tool_result"
-	CodeExecutionToolResultError            string // Always "code_execution_tool_result_error"
-	Completion                              string // Always "completion"
-	Computer                                string // Always "computer"
-	Computer20241022                        string // Always "computer_20241022"
-	Computer20250124                        string // Always "computer_20250124"
-	ContainerUpload                         string // Always "container_upload"
-	Content                                 string // Always "content"
-	ContentBlockDelta                       string // Always "content_block_delta"
-	ContentBlockLocation                    string // Always "content_block_location"
-	ContentBlockStart                       string // Always "content_block_start"
-	ContentBlockStop                        string // Always "content_block_stop"
-	Create                                  string // Always "create"
-	Delete                                  string // Always "delete"
-	Disabled                                string // Always "disabled"
-	Document                                string // Always "document"
-	Enabled                                 string // Always "enabled"
-	Ephemeral                               string // Always "ephemeral"
-	Error                                   string // Always "error"
-	Errored                                 string // Always "errored"
-	Expired                                 string // Always "expired"
-	File                                    string // Always "file"
-	Image                                   string // Always "image"
-	InputJSONDelta                          string // Always "input_json_delta"
-	InputTokens                             string // Always "input_tokens"
-	Insert                                  string // Always "insert"
-	InvalidRequestError                     string // Always "invalid_request_error"
-	MCPToolResult                           string // Always "mcp_tool_result"
-	MCPToolUse                              string // Always "mcp_tool_use"
-	Memory                                  string // Always "memory"
-	Memory20250818                          string // Always "memory_20250818"
-	Message                                 string // Always "message"
-	MessageBatch                            string // Always "message_batch"
-	MessageBatchDeleted                     string // Always "message_batch_deleted"
-	MessageDelta                            string // Always "message_delta"
-	MessageStart                            string // Always "message_start"
-	MessageStop                             string // Always "message_stop"
-	Model                                   string // Always "model"
-	None                                    string // Always "none"
-	NotFoundError                           string // Always "not_found_error"
-	Object                                  string // Always "object"
-	OverloadedError                         string // Always "overloaded_error"
-	PageLocation                            string // Always "page_location"
-	PermissionError                         string // Always "permission_error"
-	RateLimitError                          string // Always "rate_limit_error"
-	RedactedThinking                        string // Always "redacted_thinking"
-	Rename                                  string // Always "rename"
-	SearchResult                            string // Always "search_result"
-	SearchResultLocation                    string // Always "search_result_location"
-	ServerToolUse                           string // Always "server_tool_use"
-	SignatureDelta                          string // Always "signature_delta"
-	StrReplace                              string // Always "str_replace"
-	StrReplaceBasedEditTool                 string // Always "str_replace_based_edit_tool"
-	StrReplaceEditor                        string // Always "str_replace_editor"
-	Succeeded                               string // Always "succeeded"
-	Text                                    string // Always "text"
-	TextDelta                               string // Always "text_delta"
-	TextEditor20241022                      string // Always "text_editor_20241022"
-	TextEditor20250124                      string // Always "text_editor_20250124"
-	TextEditor20250429                      string // Always "text_editor_20250429"
-	TextEditor20250728                      string // Always "text_editor_20250728"
-	TextEditorCodeExecutionCreateResult     string // Always "text_editor_code_execution_create_result"
-	TextEditorCodeExecutionStrReplaceResult string // Always "text_editor_code_execution_str_replace_result"
-	TextEditorCodeExecutionToolResult       string // Always "text_editor_code_execution_tool_result"
-	TextEditorCodeExecutionToolResultError  string // Always "text_editor_code_execution_tool_result_error"
-	TextEditorCodeExecutionViewResult       string // Always "text_editor_code_execution_view_result"
-	TextPlain                               string // Always "text/plain"
-	Thinking                                string // Always "thinking"
-	ThinkingDelta                           string // Always "thinking_delta"
-	TimeoutError                            string // Always "timeout_error"
-	Tool                                    string // Always "tool"
-	ToolResult                              string // Always "tool_result"
-	ToolUse                                 string // Always "tool_use"
-	ToolUses                                string // Always "tool_uses"
-	URL                                     string // Always "url"
-	View                                    string // Always "view"
-	WebFetch                                string // Always "web_fetch"
-	WebFetch20250910                        string // Always "web_fetch_20250910"
-	WebFetchResult                          string // Always "web_fetch_result"
-	WebFetchToolResult                      string // Always "web_fetch_tool_result"
-	WebFetchToolResultError                 string // Always "web_fetch_tool_result_error"
-	WebSearch                               string // Always "web_search"
-	WebSearch20250305                       string // Always "web_search_20250305"
-	WebSearchResult                         string // Always "web_search_result"
-	WebSearchResultLocation                 string // Always "web_search_result_location"
-	WebSearchToolResult                     string // Always "web_search_tool_result"
-	WebSearchToolResultError                string // Always "web_search_tool_result_error"
-)
+type Adaptive string                                // Always "adaptive"
+type All string                                     // Always "all"
+type Any string                                     // Always "any"
+type APIError string                                // Always "api_error"
+type ApplicationPDF string                          // Always "application/pdf"
+type Approximate string                             // Always "approximate"
+type Assistant string                               // Always "assistant"
+type AuthenticationError string                     // Always "authentication_error"
+type Auto string                                    // Always "auto"
+type Base64 string                                  // Always "base64"
+type Bash string                                    // Always "bash"
+type Bash20241022 string                            // Always "bash_20241022"
+type Bash20250124 string                            // Always "bash_20250124"
+type BashCodeExecutionOutput string                 // Always "bash_code_execution_output"
+type BashCodeExecutionResult string                 // Always "bash_code_execution_result"
+type BashCodeExecutionToolResult string             // Always "bash_code_execution_tool_result"
+type BashCodeExecutionToolResultError string        // Always "bash_code_execution_tool_result_error"
+type BillingError string                            // Always "billing_error"
+type Canceled string                                // Always "canceled"
+type CharLocation string                            // Always "char_location"
+type CitationsDelta string                          // Always "citations_delta"
+type ClearThinking20251015 string                   // Always "clear_thinking_20251015"
+type ClearToolUses20250919 string                   // Always "clear_tool_uses_20250919"
+type CodeExecution string                           // Always "code_execution"
+type CodeExecution20250522 string                   // Always "code_execution_20250522"
+type CodeExecution20250825 string                   // Always "code_execution_20250825"
+type CodeExecution20260120 string                   // Always "code_execution_20260120"
+type CodeExecutionOutput string                     // Always "code_execution_output"
+type CodeExecutionResult string                     // Always "code_execution_result"
+type CodeExecutionToolResult string                 // Always "code_execution_tool_result"
+type CodeExecutionToolResultError string            // Always "code_execution_tool_result_error"
+type Compact20260112 string                         // Always "compact_20260112"
+type Compaction string                              // Always "compaction"
+type CompactionDelta string                         // Always "compaction_delta"
+type Completion string                              // Always "completion"
+type Computer string                                // Always "computer"
+type Computer20241022 string                        // Always "computer_20241022"
+type Computer20250124 string                        // Always "computer_20250124"
+type Computer20251124 string                        // Always "computer_20251124"
+type ContainerUpload string                         // Always "container_upload"
+type Content string                                 // Always "content"
+type ContentBlockDelta string                       // Always "content_block_delta"
+type ContentBlockLocation string                    // Always "content_block_location"
+type ContentBlockStart string                       // Always "content_block_start"
+type ContentBlockStop string                        // Always "content_block_stop"
+type Create string                                  // Always "create"
+type Delete string                                  // Always "delete"
+type Direct string                                  // Always "direct"
+type Disabled string                                // Always "disabled"
+type Document string                                // Always "document"
+type Enabled string                                 // Always "enabled"
+type EncryptedCodeExecutionResult string            // Always "encrypted_code_execution_result"
+type Ephemeral string                               // Always "ephemeral"
+type Error string                                   // Always "error"
+type Errored string                                 // Always "errored"
+type Expired string                                 // Always "expired"
+type File string                                    // Always "file"
+type Image string                                   // Always "image"
+type InputJSONDelta string                          // Always "input_json_delta"
+type InputTokens string                             // Always "input_tokens"
+type Insert string                                  // Always "insert"
+type InvalidRequestError string                     // Always "invalid_request_error"
+type JSONSchema string                              // Always "json_schema"
+type MCPToolResult string                           // Always "mcp_tool_result"
+type MCPToolUse string                              // Always "mcp_tool_use"
+type MCPToolset string                              // Always "mcp_toolset"
+type Memory string                                  // Always "memory"
+type Memory20250818 string                          // Always "memory_20250818"
+type Message string                                 // Always "message"
+type MessageBatch string                            // Always "message_batch"
+type MessageBatchDeleted string                     // Always "message_batch_deleted"
+type MessageDelta string                            // Always "message_delta"
+type MessageStart string                            // Always "message_start"
+type MessageStop string                             // Always "message_stop"
+type Model string                                   // Always "model"
+type None string                                    // Always "none"
+type NotFoundError string                           // Always "not_found_error"
+type Object string                                  // Always "object"
+type OverloadedError string                         // Always "overloaded_error"
+type PageLocation string                            // Always "page_location"
+type PermissionError string                         // Always "permission_error"
+type RateLimitError string                          // Always "rate_limit_error"
+type RedactedThinking string                        // Always "redacted_thinking"
+type Rename string                                  // Always "rename"
+type SearchResult string                            // Always "search_result"
+type SearchResultLocation string                    // Always "search_result_location"
+type ServerToolUse string                           // Always "server_tool_use"
+type SignatureDelta string                          // Always "signature_delta"
+type StrReplace string                              // Always "str_replace"
+type StrReplaceBasedEditTool string                 // Always "str_replace_based_edit_tool"
+type StrReplaceEditor string                        // Always "str_replace_editor"
+type Succeeded string                               // Always "succeeded"
+type Text string                                    // Always "text"
+type TextDelta string                               // Always "text_delta"
+type TextEditor20241022 string                      // Always "text_editor_20241022"
+type TextEditor20250124 string                      // Always "text_editor_20250124"
+type TextEditor20250429 string                      // Always "text_editor_20250429"
+type TextEditor20250728 string                      // Always "text_editor_20250728"
+type TextEditorCodeExecutionCreateResult string     // Always "text_editor_code_execution_create_result"
+type TextEditorCodeExecutionStrReplaceResult string // Always "text_editor_code_execution_str_replace_result"
+type TextEditorCodeExecutionToolResult string       // Always "text_editor_code_execution_tool_result"
+type TextEditorCodeExecutionToolResultError string  // Always "text_editor_code_execution_tool_result_error"
+type TextEditorCodeExecutionViewResult string       // Always "text_editor_code_execution_view_result"
+type TextPlain string                               // Always "text/plain"
+type Thinking string                                // Always "thinking"
+type ThinkingDelta string                           // Always "thinking_delta"
+type ThinkingTurns string                           // Always "thinking_turns"
+type TimeoutError string                            // Always "timeout_error"
+type Tool string                                    // Always "tool"
+type ToolReference string                           // Always "tool_reference"
+type ToolResult string                              // Always "tool_result"
+type ToolSearchToolBm25 string                      // Always "tool_search_tool_bm25"
+type ToolSearchToolRegex string                     // Always "tool_search_tool_regex"
+type ToolSearchToolResult string                    // Always "tool_search_tool_result"
+type ToolSearchToolResultError string               // Always "tool_search_tool_result_error"
+type ToolSearchToolSearchResult string              // Always "tool_search_tool_search_result"
+type ToolUse string                                 // Always "tool_use"
+type ToolUses string                                // Always "tool_uses"
+type URL string                                     // Always "url"
+type View string                                    // Always "view"
+type WebFetch string                                // Always "web_fetch"
+type WebFetch20250910 string                        // Always "web_fetch_20250910"
+type WebFetch20260209 string                        // Always "web_fetch_20260209"
+type WebFetchResult string                          // Always "web_fetch_result"
+type WebFetchToolResult string                      // Always "web_fetch_tool_result"
+type WebFetchToolResultError string                 // Always "web_fetch_tool_result_error"
+type WebSearch string                               // Always "web_search"
+type WebSearch20250305 string                       // Always "web_search_20250305"
+type WebSearch20260209 string                       // Always "web_search_20260209"
+type WebSearchResult string                         // Always "web_search_result"
+type WebSearchResultLocation string                 // Always "web_search_result_location"
+type WebSearchToolResult string                     // Always "web_search_tool_result"
+type WebSearchToolResultError string                // Always "web_search_tool_result_error"
 
+func (c Adaptive) Default() Adaptive                       { return "adaptive" }
+func (c All) Default() All                                 { return "all" }
 func (c Any) Default() Any                                 { return "any" }
 func (c APIError) Default() APIError                       { return "api_error" }
 func (c ApplicationPDF) Default() ApplicationPDF           { return "application/pdf" }
@@ -160,15 +181,12 @@ func (c Bash20250124) Default() Bash20250124               { return "bash_202501
 func (c BashCodeExecutionOutput) Default() BashCodeExecutionOutput {
 	return "bash_code_execution_output"
 }
-
 func (c BashCodeExecutionResult) Default() BashCodeExecutionResult {
 	return "bash_code_execution_result"
 }
-
 func (c BashCodeExecutionToolResult) Default() BashCodeExecutionToolResult {
 	return "bash_code_execution_tool_result"
 }
-
 func (c BashCodeExecutionToolResultError) Default() BashCodeExecutionToolResultError {
 	return "bash_code_execution_tool_result_error"
 }
@@ -176,23 +194,28 @@ func (c BillingError) Default() BillingError                   { return "billing
 func (c Canceled) Default() Canceled                           { return "canceled" }
 func (c CharLocation) Default() CharLocation                   { return "char_location" }
 func (c CitationsDelta) Default() CitationsDelta               { return "citations_delta" }
+func (c ClearThinking20251015) Default() ClearThinking20251015 { return "clear_thinking_20251015" }
 func (c ClearToolUses20250919) Default() ClearToolUses20250919 { return "clear_tool_uses_20250919" }
 func (c CodeExecution) Default() CodeExecution                 { return "code_execution" }
 func (c CodeExecution20250522) Default() CodeExecution20250522 { return "code_execution_20250522" }
 func (c CodeExecution20250825) Default() CodeExecution20250825 { return "code_execution_20250825" }
+func (c CodeExecution20260120) Default() CodeExecution20260120 { return "code_execution_20260120" }
 func (c CodeExecutionOutput) Default() CodeExecutionOutput     { return "code_execution_output" }
 func (c CodeExecutionResult) Default() CodeExecutionResult     { return "code_execution_result" }
 func (c CodeExecutionToolResult) Default() CodeExecutionToolResult {
 	return "code_execution_tool_result"
 }
-
 func (c CodeExecutionToolResultError) Default() CodeExecutionToolResultError {
 	return "code_execution_tool_result_error"
 }
+func (c Compact20260112) Default() Compact20260112           { return "compact_20260112" }
+func (c Compaction) Default() Compaction                     { return "compaction" }
+func (c CompactionDelta) Default() CompactionDelta           { return "compaction_delta" }
 func (c Completion) Default() Completion                     { return "completion" }
 func (c Computer) Default() Computer                         { return "computer" }
 func (c Computer20241022) Default() Computer20241022         { return "computer_20241022" }
 func (c Computer20250124) Default() Computer20250124         { return "computer_20250124" }
+func (c Computer20251124) Default() Computer20251124         { return "computer_20251124" }
 func (c ContainerUpload) Default() ContainerUpload           { return "container_upload" }
 func (c Content) Default() Content                           { return "content" }
 func (c ContentBlockDelta) Default() ContentBlockDelta       { return "content_block_delta" }
@@ -201,9 +224,13 @@ func (c ContentBlockStart) Default() ContentBlockStart       { return "content_b
 func (c ContentBlockStop) Default() ContentBlockStop         { return "content_block_stop" }
 func (c Create) Default() Create                             { return "create" }
 func (c Delete) Default() Delete                             { return "delete" }
+func (c Direct) Default() Direct                             { return "direct" }
 func (c Disabled) Default() Disabled                         { return "disabled" }
 func (c Document) Default() Document                         { return "document" }
 func (c Enabled) Default() Enabled                           { return "enabled" }
+func (c EncryptedCodeExecutionResult) Default() EncryptedCodeExecutionResult {
+	return "encrypted_code_execution_result"
+}
 func (c Ephemeral) Default() Ephemeral                       { return "ephemeral" }
 func (c Error) Default() Error                               { return "error" }
 func (c Errored) Default() Errored                           { return "errored" }
@@ -214,8 +241,10 @@ func (c InputJSONDelta) Default() InputJSONDelta             { return "input_jso
 func (c InputTokens) Default() InputTokens                   { return "input_tokens" }
 func (c Insert) Default() Insert                             { return "insert" }
 func (c InvalidRequestError) Default() InvalidRequestError   { return "invalid_request_error" }
+func (c JSONSchema) Default() JSONSchema                     { return "json_schema" }
 func (c MCPToolResult) Default() MCPToolResult               { return "mcp_tool_result" }
 func (c MCPToolUse) Default() MCPToolUse                     { return "mcp_tool_use" }
+func (c MCPToolset) Default() MCPToolset                     { return "mcp_toolset" }
 func (c Memory) Default() Memory                             { return "memory" }
 func (c Memory20250818) Default() Memory20250818             { return "memory_20250818" }
 func (c Message) Default() Message                           { return "message" }
@@ -253,34 +282,42 @@ func (c TextEditor20250728) Default() TextEditor20250728 { return "text_editor_2
 func (c TextEditorCodeExecutionCreateResult) Default() TextEditorCodeExecutionCreateResult {
 	return "text_editor_code_execution_create_result"
 }
-
 func (c TextEditorCodeExecutionStrReplaceResult) Default() TextEditorCodeExecutionStrReplaceResult {
 	return "text_editor_code_execution_str_replace_result"
 }
-
 func (c TextEditorCodeExecutionToolResult) Default() TextEditorCodeExecutionToolResult {
 	return "text_editor_code_execution_tool_result"
 }
-
 func (c TextEditorCodeExecutionToolResultError) Default() TextEditorCodeExecutionToolResultError {
 	return "text_editor_code_execution_tool_result_error"
 }
-
 func (c TextEditorCodeExecutionViewResult) Default() TextEditorCodeExecutionViewResult {
 	return "text_editor_code_execution_view_result"
 }
-func (c TextPlain) Default() TextPlain                   { return "text/plain" }
-func (c Thinking) Default() Thinking                     { return "thinking" }
-func (c ThinkingDelta) Default() ThinkingDelta           { return "thinking_delta" }
-func (c TimeoutError) Default() TimeoutError             { return "timeout_error" }
-func (c Tool) Default() Tool                             { return "tool" }
-func (c ToolResult) Default() ToolResult                 { return "tool_result" }
+func (c TextPlain) Default() TextPlain                       { return "text/plain" }
+func (c Thinking) Default() Thinking                         { return "thinking" }
+func (c ThinkingDelta) Default() ThinkingDelta               { return "thinking_delta" }
+func (c ThinkingTurns) Default() ThinkingTurns               { return "thinking_turns" }
+func (c TimeoutError) Default() TimeoutError                 { return "timeout_error" }
+func (c Tool) Default() Tool                                 { return "tool" }
+func (c ToolReference) Default() ToolReference               { return "tool_reference" }
+func (c ToolResult) Default() ToolResult                     { return "tool_result" }
+func (c ToolSearchToolBm25) Default() ToolSearchToolBm25     { return "tool_search_tool_bm25" }
+func (c ToolSearchToolRegex) Default() ToolSearchToolRegex   { return "tool_search_tool_regex" }
+func (c ToolSearchToolResult) Default() ToolSearchToolResult { return "tool_search_tool_result" }
+func (c ToolSearchToolResultError) Default() ToolSearchToolResultError {
+	return "tool_search_tool_result_error"
+}
+func (c ToolSearchToolSearchResult) Default() ToolSearchToolSearchResult {
+	return "tool_search_tool_search_result"
+}
 func (c ToolUse) Default() ToolUse                       { return "tool_use" }
 func (c ToolUses) Default() ToolUses                     { return "tool_uses" }
 func (c URL) Default() URL                               { return "url" }
 func (c View) Default() View                             { return "view" }
 func (c WebFetch) Default() WebFetch                     { return "web_fetch" }
 func (c WebFetch20250910) Default() WebFetch20250910     { return "web_fetch_20250910" }
+func (c WebFetch20260209) Default() WebFetch20260209     { return "web_fetch_20260209" }
 func (c WebFetchResult) Default() WebFetchResult         { return "web_fetch_result" }
 func (c WebFetchToolResult) Default() WebFetchToolResult { return "web_fetch_tool_result" }
 func (c WebFetchToolResultError) Default() WebFetchToolResultError {
@@ -288,6 +325,7 @@ func (c WebFetchToolResultError) Default() WebFetchToolResultError {
 }
 func (c WebSearch) Default() WebSearch                 { return "web_search" }
 func (c WebSearch20250305) Default() WebSearch20250305 { return "web_search_20250305" }
+func (c WebSearch20260209) Default() WebSearch20260209 { return "web_search_20260209" }
 func (c WebSearchResult) Default() WebSearchResult     { return "web_search_result" }
 func (c WebSearchResultLocation) Default() WebSearchResultLocation {
 	return "web_search_result_location"
@@ -297,6 +335,8 @@ func (c WebSearchToolResultError) Default() WebSearchToolResultError {
 	return "web_search_tool_result_error"
 }
 
+func (c Adaptive) MarshalJSON() ([]byte, error)                            { return marshalString(c) }
+func (c All) MarshalJSON() ([]byte, error)                                 { return marshalString(c) }
 func (c Any) MarshalJSON() ([]byte, error)                                 { return marshalString(c) }
 func (c APIError) MarshalJSON() ([]byte, error)                            { return marshalString(c) }
 func (c ApplicationPDF) MarshalJSON() ([]byte, error)                      { return marshalString(c) }
@@ -316,18 +356,24 @@ func (c BillingError) MarshalJSON() ([]byte, error)                        { ret
 func (c Canceled) MarshalJSON() ([]byte, error)                            { return marshalString(c) }
 func (c CharLocation) MarshalJSON() ([]byte, error)                        { return marshalString(c) }
 func (c CitationsDelta) MarshalJSON() ([]byte, error)                      { return marshalString(c) }
+func (c ClearThinking20251015) MarshalJSON() ([]byte, error)               { return marshalString(c) }
 func (c ClearToolUses20250919) MarshalJSON() ([]byte, error)               { return marshalString(c) }
 func (c CodeExecution) MarshalJSON() ([]byte, error)                       { return marshalString(c) }
 func (c CodeExecution20250522) MarshalJSON() ([]byte, error)               { return marshalString(c) }
 func (c CodeExecution20250825) MarshalJSON() ([]byte, error)               { return marshalString(c) }
+func (c CodeExecution20260120) MarshalJSON() ([]byte, error)               { return marshalString(c) }
 func (c CodeExecutionOutput) MarshalJSON() ([]byte, error)                 { return marshalString(c) }
 func (c CodeExecutionResult) MarshalJSON() ([]byte, error)                 { return marshalString(c) }
 func (c CodeExecutionToolResult) MarshalJSON() ([]byte, error)             { return marshalString(c) }
 func (c CodeExecutionToolResultError) MarshalJSON() ([]byte, error)        { return marshalString(c) }
+func (c Compact20260112) MarshalJSON() ([]byte, error)                     { return marshalString(c) }
+func (c Compaction) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
+func (c CompactionDelta) MarshalJSON() ([]byte, error)                     { return marshalString(c) }
 func (c Completion) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
 func (c Computer) MarshalJSON() ([]byte, error)                            { return marshalString(c) }
 func (c Computer20241022) MarshalJSON() ([]byte, error)                    { return marshalString(c) }
 func (c Computer20250124) MarshalJSON() ([]byte, error)                    { return marshalString(c) }
+func (c Computer20251124) MarshalJSON() ([]byte, error)                    { return marshalString(c) }
 func (c ContainerUpload) MarshalJSON() ([]byte, error)                     { return marshalString(c) }
 func (c Content) MarshalJSON() ([]byte, error)                             { return marshalString(c) }
 func (c ContentBlockDelta) MarshalJSON() ([]byte, error)                   { return marshalString(c) }
@@ -336,9 +382,11 @@ func (c ContentBlockStart) MarshalJSON() ([]byte, error)                   { ret
 func (c ContentBlockStop) MarshalJSON() ([]byte, error)                    { return marshalString(c) }
 func (c Create) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
 func (c Delete) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
+func (c Direct) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
 func (c Disabled) MarshalJSON() ([]byte, error)                            { return marshalString(c) }
 func (c Document) MarshalJSON() ([]byte, error)                            { return marshalString(c) }
 func (c Enabled) MarshalJSON() ([]byte, error)                             { return marshalString(c) }
+func (c EncryptedCodeExecutionResult) MarshalJSON() ([]byte, error)        { return marshalString(c) }
 func (c Ephemeral) MarshalJSON() ([]byte, error)                           { return marshalString(c) }
 func (c Error) MarshalJSON() ([]byte, error)                               { return marshalString(c) }
 func (c Errored) MarshalJSON() ([]byte, error)                             { return marshalString(c) }
@@ -349,8 +397,10 @@ func (c InputJSONDelta) MarshalJSON() ([]byte, error)                      { ret
 func (c InputTokens) MarshalJSON() ([]byte, error)                         { return marshalString(c) }
 func (c Insert) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
 func (c InvalidRequestError) MarshalJSON() ([]byte, error)                 { return marshalString(c) }
+func (c JSONSchema) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
 func (c MCPToolResult) MarshalJSON() ([]byte, error)                       { return marshalString(c) }
 func (c MCPToolUse) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
+func (c MCPToolset) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
 func (c Memory) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
 func (c Memory20250818) MarshalJSON() ([]byte, error)                      { return marshalString(c) }
 func (c Message) MarshalJSON() ([]byte, error)                             { return marshalString(c) }
@@ -395,20 +445,29 @@ func (c TextEditorCodeExecutionViewResult) MarshalJSON() ([]byte, error) { retur
 func (c TextPlain) MarshalJSON() ([]byte, error)                         { return marshalString(c) }
 func (c Thinking) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
 func (c ThinkingDelta) MarshalJSON() ([]byte, error)                     { return marshalString(c) }
+func (c ThinkingTurns) MarshalJSON() ([]byte, error)                     { return marshalString(c) }
 func (c TimeoutError) MarshalJSON() ([]byte, error)                      { return marshalString(c) }
 func (c Tool) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
+func (c ToolReference) MarshalJSON() ([]byte, error)                     { return marshalString(c) }
 func (c ToolResult) MarshalJSON() ([]byte, error)                        { return marshalString(c) }
+func (c ToolSearchToolBm25) MarshalJSON() ([]byte, error)                { return marshalString(c) }
+func (c ToolSearchToolRegex) MarshalJSON() ([]byte, error)               { return marshalString(c) }
+func (c ToolSearchToolResult) MarshalJSON() ([]byte, error)              { return marshalString(c) }
+func (c ToolSearchToolResultError) MarshalJSON() ([]byte, error)         { return marshalString(c) }
+func (c ToolSearchToolSearchResult) MarshalJSON() ([]byte, error)        { return marshalString(c) }
 func (c ToolUse) MarshalJSON() ([]byte, error)                           { return marshalString(c) }
 func (c ToolUses) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
 func (c URL) MarshalJSON() ([]byte, error)                               { return marshalString(c) }
 func (c View) MarshalJSON() ([]byte, error)                              { return marshalString(c) }
 func (c WebFetch) MarshalJSON() ([]byte, error)                          { return marshalString(c) }
 func (c WebFetch20250910) MarshalJSON() ([]byte, error)                  { return marshalString(c) }
+func (c WebFetch20260209) MarshalJSON() ([]byte, error)                  { return marshalString(c) }
 func (c WebFetchResult) MarshalJSON() ([]byte, error)                    { return marshalString(c) }
 func (c WebFetchToolResult) MarshalJSON() ([]byte, error)                { return marshalString(c) }
 func (c WebFetchToolResultError) MarshalJSON() ([]byte, error)           { return marshalString(c) }
 func (c WebSearch) MarshalJSON() ([]byte, error)                         { return marshalString(c) }
 func (c WebSearch20250305) MarshalJSON() ([]byte, error)                 { return marshalString(c) }
+func (c WebSearch20260209) MarshalJSON() ([]byte, error)                 { return marshalString(c) }
 func (c WebSearchResult) MarshalJSON() ([]byte, error)                   { return marshalString(c) }
 func (c WebSearchResultLocation) MarshalJSON() ([]byte, error)           { return marshalString(c) }
 func (c WebSearchToolResult) MarshalJSON() ([]byte, error)               { return marshalString(c) }
